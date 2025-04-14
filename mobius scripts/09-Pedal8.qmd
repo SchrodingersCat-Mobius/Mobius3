@@ -1,0 +1,49 @@
+---
+title: Pedal8.msl
+---
+
+```default
+#name Pedal8
+#sustain
+#repeat
+
+//Pedal 8 is labelled FUNCTION on Sheeran X Looper
+
+//When Looper X is in normal mode (fmode=0) Press puts Looper X into Menu A Mode (fmode=0, fmenuA=0, fmenuB=0, fmenuTap=0)
+//When Looper X is not in normal mode (fmode=1) Press puts Looper X into normal mode (fmode=1, fmenuA=1, fmenuB=0, fmenuTap=0)
+//Press and Hold allows the Looper X to toggle between Menu A and Menu B modes
+//Double Press puts the Looper X into Tap Tempo mode (Tapping the RECORD+PLAY pedal is then used to set the tempo)
+
+if fmode equals 0{
+  fmode = 1
+  fmenuA = 1
+  fmenuB = 0
+  fmenuTap = 0
+}else{
+  fmode = 0
+  fmenuA = 0
+  fmenuB = 0
+  fmenuTap = 0
+}
+
+function OnSustain(sustainCount){
+  if fmode equals 2{
+    fmode = 1
+    fmenuA = 1
+	 fmenuB = 0
+	 fmenuTap = 0	 
+  }else{
+    fmode = 2
+    fmenuA = 0
+    fmenuB = 1
+    fmenuTap = 0
+  }
+}
+
+function OnRepeat(repeatCount){
+  fmode = 3
+  fmenuA = 0
+  fmenuB = 0
+ fmenuTap = 1
+}
+```

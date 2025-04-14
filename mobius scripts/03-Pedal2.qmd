@@ -1,0 +1,31 @@
+---
+title: Pedal2.msl
+---
+
+```default
+#name Pedal2
+#sustain
+#repeat
+
+//When Mute Mode is off (mmode=0) pressing pedal 2 selects Track 2
+//When Mute mode is on (mmode=1) pressing pedal 2 Selects Track 2 and then Mutes/Unmutes it.
+
+SelectTrack(2)
+
+//in 2 Mute is used here as workaround for a bug where the active track is muted before switching to Track 2
+if mmode equals 1{
+  in 2 Mute
+}
+
+function OnSustain(sustainCount){
+ 
+}
+
+//Double press of Pedal 2 solos Track 2
+function OnRepeat(repeatCount){
+  in 1 MuteOn
+  in 2 MuteOff
+  in 3 MuteOn
+  in 4 MuteOn
+}
+```

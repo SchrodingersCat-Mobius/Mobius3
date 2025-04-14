@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>LooperX-Scripting - About</title>
+<title>LooperX-Scripting</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -73,7 +73,7 @@ ul.task-list li input[type="checkbox"] {
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-sidebar floating nav-fixed">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -95,7 +95,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./about.html" aria-current="page"> 
+    <a class="nav-link" href="./about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
 </ul>
@@ -105,74 +105,44 @@ ul.task-list li input[type="checkbox"] {
 </div>
       </div> <!-- /container-fluid -->
     </nav>
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-        <i class="bi bi-layout-text-sidebar-reverse"></i>
-      </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./about.html">About</a></li></ol></nav>
-        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-        </a>
-    </div>
-  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="sidebar-menu-container"> 
-    <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./about.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">About</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Forum Post.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Overview</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Pedal1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Pedal1.msl</span></a>
-  </div>
-</li>
-    </ul>
-    </div>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
-<main class="content column-page-right" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">About</h1>
-</div>
+<main class="content column-page-left" id="quarto-document-content">
 
 
 
-<div class="quarto-title-meta column-page-right">
 
-    
-  
-    
-  </div>
-  
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>I’m posting some notes about my initial attempts to “emulate” the Sheeran Looper X. I don’t actually own of those, but the User Manual is available online at https://cdn.inmusicbrands.com/sheeran/looper-x/Sheeran%20Looper%20X%20-%20User%20Guide%20-%20v1.0.0.pdf and I’ve been using that to understand how it operates.</p>
+<p>At its core, the looper X is basically a four Track looper (with only one Loop per Track) and eight foot pedals arranged in two rows of four. The top row of Pedals are labelled as Track 1/A, Track 2/B, Track 3/C and Track 4/D, whilst the bottom row has RECORD+PLAY, STOP, MODE and FUNCTION pedals but the pedals have multiple functions depending on the “state” of the looper. Because of that I’ll also refer to the physical buttons/pedals as Pedals 1-4 (top row) and Pedals 5-8 (bottom row).</p>
+<p>Looping can be done in one of five modes:</p>
+<ol type="1">
+<li>Multi mode (4 synchronized tracks locked to the same length),</li>
+<li>Sync Mode (4 synchronized tracks which must be integer multiples or fractions of the primary track),</li>
+<li>Song Mode (4 tracks of potentially different lengths which can be played independently of each other),</li>
+<li>Band Mode (1 track acts as a backing loop, while the other 3 are played independently over the backing loop and must be integer multiples of fractions of the track providing the backing loop),</li>
+<li>Free mode (4 un-synced free-form tracks)</li>
+</ol>
+<p>At this stage I’m only trying to emulate what would happen if the Looper X was looping in Sync Mode which seems to most naturally align to how I have been using Mobius so far.</p>
+<p>To simplify things, I’m also assuming that I am using Mobius as a standalone app, that I’ve configured it to have 4 Audio Tracks and only 1 Loop per Track, SyncHost=Transport for Track 1, and SyncHost=Track for the others, and then SyncUnit=Loop, TrackSyncUnit=Loop, Quantize=Off, and SwitchQuantize=Off for all Tracks.</p>
+<p>I decided to create a separate script for each pedal controlling that pedal’s behaviour as well as a separate script setting up the global variables, visual lights and labels that provide the connection between the pedal scripts and what appears in the Mobius display to show the current state of the emulated Looper X (9 scripts in total).</p>
 
 
-</header>
-
-
-<p>About this site</p>
-
-
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
