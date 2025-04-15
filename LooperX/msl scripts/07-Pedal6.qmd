@@ -11,8 +11,7 @@ title: Pedal6.msl
 //When Looper X is in normal mode (fmode=0) Press immediately stops all tracks
 //When Looper X is in normal mode (fmode=0) Press and Holdclears all tracks
 
-
-if fmode==0{in all {if inPause Play else Stop}}
+if fmode==0{in all {Stop}}
 
 function OnSustain() {
      in all {if fmode == 0 {Reset}}

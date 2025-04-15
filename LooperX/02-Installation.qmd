@@ -26,6 +26,13 @@ title: "Installation"
         <Element name="HostSync" x="15" y="246" width="290" height="53"/>
         <Element name="MidiSync" x="17" y="317" width="291" height="51"/>
         <Element name="Transport" x="15" y="392" width="288" height="51"/>
+		<Element name="MuteModeLight" x="935" y="115" width="50" height="20"/>
+		<Element name="MuteModeLabel" x="985" y="115" width="68" height="20"/>
+		<Element name="fmodeLight" x="935" y="145" width="50" height="20"/>
+		<Element name="fmodeLabel" x="985" y="145" width="95" height="20"/>
+		<Element name="fmenuALabel" x="1080" y="145" width="15" height="20"/>
+		<Element name="fmenuBLabel" x="1095" y="145" width="15" height="20"/>
+		<Element name="fmenuTapLabel" x="1110" y="145" width="25" height="20"/>
         <Strip name="Docked">
           <Element name="trackNumber"/>
           <Element name="loopRadar"/>

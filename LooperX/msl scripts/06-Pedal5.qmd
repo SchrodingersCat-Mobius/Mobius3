@@ -6,7 +6,6 @@ title: Pedal5.msl
 #name Pedal5
 #sustain 1200
 
-
 //Pedal 5 is labelled RECORD+PLAY on Sheeran Looper X
 
 //When Looper X is in normal mode (fmode=0) Press does Record/Overdub/Play

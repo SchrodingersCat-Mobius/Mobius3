@@ -6,13 +6,11 @@ title: Pedal7.msl
 #name Pedal7
 //Pedal 7 is labelled MODE on Sheeran X Looper
 
-
 // Press and hold changes the looper mode on Sheeran X Looper but this is not implemented here.
 
 //When Looper X is not in mute mode (mmode=0) Press puts Looper X into Mute Mode
 //When Looper X is in mute mode (mmode=1) Press exits Mute Mode
 //Press and Hold allows the Looper X to change looper mode (not implemented yet)
-
 
 if mmode equals 0{
   mmode = 1
