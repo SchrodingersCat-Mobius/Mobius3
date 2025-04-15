@@ -2,7 +2,7 @@
 title: "Overview"
 ---
 
-I'm posting some notes about my initial attempts to "emulate" the Sheeran Looper X within Mobius.  I don't actually own of those, but the User Manual is available online at <https://cdn.inmusicbrands.com/sheeran/looper-x/Sheeran%20Looper%20X%20-%20User%20Guide%20-%20v1.0.0.pdf> and I've been using that to understand how it operates.
+I'm posting some notes about my initial attempts to "emulate" the Sheeran Looper X within Möbius.  I don't actually own of those, but the User Manual is available online at <https://cdn.inmusicbrands.com/sheeran/looper-x/Sheeran%20Looper%20X%20-%20User%20Guide%20-%20v1.0.0.pdf> and I've been using that to understand how it operates.
 
 Looping can be done in one of five modes:
 
@@ -12,7 +12,7 @@ Looping can be done in one of five modes:
 4. Band Mode (1 track acts as a backing loop, while the other 3 are played independently over the backing loop and must be integer multiples of fractions of the track providing the backing loop),
 5. Free mode (4 un-synced free-form tracks)
 
-At this stage I'm only trying to emulate what would happen if the Looper X was looping in Sync Mode which seems to most naturally align to how I have been using Mobius so far.
+At this stage I'm only trying to emulate what would happen if the Looper X was looping in Sync Mode which seems to most naturally align to how I have been using Möbius so far.
 
 At its core, the Looper X is basically a four track looper (with only one loop per track) and eight foot pedals arranged in two rows of four. The top row of pedals are labelled as Track 1/A, Track 2/B, Track 3/C and Track 4/D, whilst the bottom row has RECORD+PLAY, STOP, MODE and FUNCTION pedals.  However, the pedals have multiple functions depending on the current state of the looper. Because of this I'll also refer to the physical buttons/pedals as Pedals 1-4 (top row) and Pedals 5-8 (bottom row).
 
@@ -31,31 +31,63 @@ Pressing and holding this pedal undoes the last layer recorded.
 
 Once you are in one of the Menu A or Menu B modes selecting functions may then involve further re-mapping of the pedal behaviour.   
 
-To simplify things, I'm also assuming that I am using Mobius as a standalone app, that I've configured it to have 4 Audio Tracks and only 1 Loop per Track,  SyncHost=Transport for Track 1, and SyncHost=Track for the others, and  then SyncUnit=Loop, TrackSyncUnit=Loop, Quantize=Off, and SwitchQuantize=Off for all Tracks.
+To simplify things, I'm also assuming that I am using Möbius as a standalone app, that I've configured it to have 4 Audio Tracks and only 1 Loop per Track,  SyncHost=Transport for Track 1, and SyncHost=Track for the others, and  then SyncUnit=Loop, TrackSyncUnit=Loop, Quantize=Off, and SwitchQuantize=Off for all Tracks.
 
-I decided to create a separate script for each pedal controlling that pedal's behaviour as well as a separate script setting up the global variables, visual lights and labels that provide the connection between the pedal scripts and what appears in the Mobius display to show the current state of the emulated Looper X (9 scripts in total).
+I decided to create a separate script for each pedal controlling that pedal's behaviour as well as a separate script setting up the global variables, visual lights and labels that provide the connection between the pedal scripts and what appears in the Möbius display to show the current state of the emulated Looper X (9 scripts in total).
 
 The scripts make use of 4 global variables (mmode, fmode, fmenuA, fmenuB, fmenuTap
 
 
 ::: {layout-ncol=2}
-![Mobius with the new UI widgets added](images/mobius-initial.png){.lightbox}
+![Möbius with the new UI widgets added](images/mobius-initial.png){.lightbox}
 
-![Mobius with Mute Mode active](images/mobius-mutemode.png){.lightbox}
+![Möbius with Mute Mode active](images/mobius-mutemode.png){.lightbox}
 :::
 
 ::: {layout-ncol=3}
-![Mobius with Menu A active](images/mobius-functionmode-menuA.png){.lightbox}
+![Möbius with Menu A active](images/mobius-functionmode-menuA.png){.lightbox}
 
-![Mobius with Menu B active](images/mobius-functionmode-menuB.png){.lightbox}
+![Möbius with Menu B active](images/mobius-functionmode-menuB.png){.lightbox}
 
-![Mobius with Tempo Tap Mode active](images/mobius-functionmode-TapMode.png){.lightbox}
+![Möbius with Tempo Tap Mode active](images/mobius-functionmode-TapMode.png){.lightbox}
 :::
 
 ## Installation Steps
 
 1. Copy the msl scripts to the `scripts` folder.
-2. Open mobius and go to Display -> Edit Layouts... -> Floating Track Strip
-  i. Drag MuteModeLabel, MuteModeLight, fmodeLabel, fmodeLight, fmenuALabel, fmenuBLabel and fmenuTapLabel from the right panel to the left panel.
+2. For some reason you can only add the new widgets defined by `SheeranXLib.msl` to the "Floating Track Strip" tab if you to try and add them via  `Display -> Edit Layouts...`. To get round this you have to manually edit the `uiconfig.xml` file.
+	i. Go to Möbius' Configuration Root folder (which you can find by selecting `Help -> About`) and open the `uiconfig.xml` file in a text editor.  Look for the section of text that looks a bit like this:
+	```xml
+	<UIConfig windowWidth="1164" windowHeight="764" activeButtonSet="Default"
+          activeLayout="Default">
+  <Layout name="Default">
+    <Element name="ModeElement" x="688" y="182"/>
+    <Element name="BeatersElement" x="514" y="132"/>
+    <Element name="LoopMeterElement" x="454" y="179"/>
+    <Element name="CounterElement" x="456" y="90"/>
+    <Element name="FloatingStripElement" x="847" y="58"/>
+    <Element name="ParametersElement" x="12" y="34"/>
+    <Element name="AudioMeterElement" x="456" y="259"/>
+    <Element name="LayerElement" x="436" y="288"/>
+    <Element name="AlertElement" x="365" y="387" height="64"/>
+    <Element name="MinorModesElement" x="437" y="57"/>
+    <Element name="TempoElement" x="438" y="31"/>
+    <Element name="LoopWindowElement" x="452" y="343"/>
+    <Element name="HostSync" x="15" y="246" width="290" height="53"/>
+    <Element name="MidiSync" x="17" y="317" width="291" height="51"/>
+    <Element name="Transport" x="15" y="392" width="288" height="51"/>
+    <Strip name="Docked">
+      <Element name="trackNumber"/>
+      <Element name="loopRadar"/>
+      <Element name="loopStack"/>
+      <Element name="output"/>
+      <Element name="outputMeter"/>
+    </Strip>
+	```
+	
+	Insert the following extra lines of text immediately before the line that says `<Strip name="Docked">`
+	
+	ii. From the "Floating Track Strip" tab, drag MuteModeLabel, MuteModeLight, fmodeLabel, fmodeLight, fmenuALabel, fmenuBLabel and fmenuTapLabel from the right panel to the left panel and then click on Save.
+	
 
 

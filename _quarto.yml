@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 website:
-  title: "LooperX-Scripting"
+  title: "Schrödinger's Cat's Möbius 3 Site"
   navbar:
     left:
       - href: index.qmd

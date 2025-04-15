@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>LooperX-Scripting - Overview</title>
+<title>Schrödinger’s Cat’s Möbius 3 Site - Overview</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -84,7 +118,7 @@ ul.task-list li input[type="checkbox"] {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">LooperX-Scripting</span>
+    <span class="navbar-title">Schrödinger’s Cat’s Möbius 3 Site</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -220,7 +254,7 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>I’m posting some notes about my initial attempts to “emulate” the Sheeran Looper X within Mobius. I don’t actually own of those, but the User Manual is available online at <a href="https://cdn.inmusicbrands.com/sheeran/looper-x/Sheeran%20Looper%20X%20-%20User%20Guide%20-%20v1.0.0.pdf" class="uri">https://cdn.inmusicbrands.com/sheeran/looper-x/Sheeran%20Looper%20X%20-%20User%20Guide%20-%20v1.0.0.pdf</a> and I’ve been using that to understand how it operates.</p>
+<p>I’m posting some notes about my initial attempts to “emulate” the Sheeran Looper X within Möbius. I don’t actually own of those, but the User Manual is available online at <a href="https://cdn.inmusicbrands.com/sheeran/looper-x/Sheeran%20Looper%20X%20-%20User%20Guide%20-%20v1.0.0.pdf" class="uri">https://cdn.inmusicbrands.com/sheeran/looper-x/Sheeran%20Looper%20X%20-%20User%20Guide%20-%20v1.0.0.pdf</a> and I’ve been using that to understand how it operates.</p>
 <p>Looping can be done in one of five modes:</p>
 <ol type="1">
 <li>Multi mode (4 synchronized tracks locked to the same length),</li>
@@ -229,7 +263,7 @@ ul.task-list li input[type="checkbox"] {
 <li>Band Mode (1 track acts as a backing loop, while the other 3 are played independently over the backing loop and must be integer multiples of fractions of the track providing the backing loop),</li>
 <li>Free mode (4 un-synced free-form tracks)</li>
 </ol>
-<p>At this stage I’m only trying to emulate what would happen if the Looper X was looping in Sync Mode which seems to most naturally align to how I have been using Mobius so far.</p>
+<p>At this stage I’m only trying to emulate what would happen if the Looper X was looping in Sync Mode which seems to most naturally align to how I have been using Möbius so far.</p>
 <p>At its core, the Looper X is basically a four track looper (with only one loop per track) and eight foot pedals arranged in two rows of four. The top row of pedals are labelled as Track 1/A, Track 2/B, Track 3/C and Track 4/D, whilst the bottom row has RECORD+PLAY, STOP, MODE and FUNCTION pedals. However, the pedals have multiple functions depending on the current state of the looper. Because of this I’ll also refer to the physical buttons/pedals as Pedals 1-4 (top row) and Pedals 5-8 (bottom row).</p>
 <section id="looper-x-pedal-behaviour" class="level2">
 <h2 class="anchored" data-anchor-id="looper-x-pedal-behaviour">Looper X Pedal Behaviour:</h2>
@@ -239,8 +273,8 @@ ul.task-list li input[type="checkbox"] {
 <p><strong>Pedal 7:</strong> Pressing the MODE pedal puts the looper into “Mute Mode”. When in “Mute Mode” Pedals 1-4 Mute/Unmute the corresponding Track. Pressing the MODE pedal a second time puts the looper back into normal operation. Pressing and holding is used to change the looper mode or access additional menu pages. (I’m not interested in implementing this behaviour.)</p>
 <p><strong>Pedal 8:</strong> Pressing the FUNCTION pedal accesses additional looping operations and machine functions. A single press re-maps the 8 pedals to perform a set of “Menu A” functions (1. Tuner, 2. FX, 3. Load, 4. Save, 5. Peel, 6. Clear All, 7. Clear Track 8. Exit). Press and hold re-maps the 8 pedals to perform a set of “Menu B” functions (1. Bounce, 2. Multiply, 3. Speed, 4. Backing Track, 5. Transpose, 6. Fade, 7. Reverse 8. Exit). Double-pressing the FUNCTION pedal enables “tap tempo”. While “tap tempo” is enabled, pressing the RECORD + PLAY pedal (Pedal 5) is used to set the desired tempo. When finished, pressing the FUNCTION pedal again exits “tap tempo” mode.</p>
 <p>Once you are in one of the Menu A or Menu B modes selecting functions may then involve further re-mapping of the pedal behaviour.</p>
-<p>To simplify things, I’m also assuming that I am using Mobius as a standalone app, that I’ve configured it to have 4 Audio Tracks and only 1 Loop per Track, SyncHost=Transport for Track 1, and SyncHost=Track for the others, and then SyncUnit=Loop, TrackSyncUnit=Loop, Quantize=Off, and SwitchQuantize=Off for all Tracks.</p>
-<p>I decided to create a separate script for each pedal controlling that pedal’s behaviour as well as a separate script setting up the global variables, visual lights and labels that provide the connection between the pedal scripts and what appears in the Mobius display to show the current state of the emulated Looper X (9 scripts in total).</p>
+<p>To simplify things, I’m also assuming that I am using Möbius as a standalone app, that I’ve configured it to have 4 Audio Tracks and only 1 Loop per Track, SyncHost=Transport for Track 1, and SyncHost=Track for the others, and then SyncUnit=Loop, TrackSyncUnit=Loop, Quantize=Off, and SwitchQuantize=Off for all Tracks.</p>
+<p>I decided to create a separate script for each pedal controlling that pedal’s behaviour as well as a separate script setting up the global variables, visual lights and labels that provide the connection between the pedal scripts and what appears in the Möbius display to show the current state of the emulated Looper X (9 scripts in total).</p>
 <p>The scripts make use of 4 global variables (mmode, fmode, fmenuA, fmenuB, fmenuTap</p>
 <div>
 
@@ -250,16 +284,16 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="images/mobius-initial.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" data-glightbox="description: .lightbox-desc-1" title="Mobius with the new UI widgets added"><img src="images/mobius-initial.png" class="img-fluid figure-img" alt="Mobius with the new UI widgets added"></a></p>
-<figcaption>Mobius with the new UI widgets added</figcaption>
+<p><a href="images/mobius-initial.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" data-glightbox="description: .lightbox-desc-1" title="Möbius with the new UI widgets added"><img src="images/mobius-initial.png" class="img-fluid figure-img" alt="Möbius with the new UI widgets added"></a></p>
+<figcaption>Möbius with the new UI widgets added</figcaption>
 </figure>
 </div>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="images/mobius-mutemode.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" data-glightbox="description: .lightbox-desc-2" title="Mobius with Mute Mode active"><img src="images/mobius-mutemode.png" class="img-fluid figure-img" alt="Mobius with Mute Mode active"></a></p>
-<figcaption>Mobius with Mute Mode active</figcaption>
+<p><a href="images/mobius-mutemode.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" data-glightbox="description: .lightbox-desc-2" title="Möbius with Mute Mode active"><img src="images/mobius-mutemode.png" class="img-fluid figure-img" alt="Möbius with Mute Mode active"></a></p>
+<figcaption>Möbius with Mute Mode active</figcaption>
 </figure>
 </div>
 </div>
@@ -273,24 +307,24 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="images/mobius-functionmode-menuA.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" data-glightbox="description: .lightbox-desc-3" title="Mobius with Menu A active"><img src="images/mobius-functionmode-menuA.png" class="img-fluid figure-img" alt="Mobius with Menu A active"></a></p>
-<figcaption>Mobius with Menu A active</figcaption>
+<p><a href="images/mobius-functionmode-menuA.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" data-glightbox="description: .lightbox-desc-3" title="Möbius with Menu A active"><img src="images/mobius-functionmode-menuA.png" class="img-fluid figure-img" alt="Möbius with Menu A active"></a></p>
+<figcaption>Möbius with Menu A active</figcaption>
 </figure>
 </div>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="images/mobius-functionmode-menuB.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" data-glightbox="description: .lightbox-desc-4" title="Mobius with Menu B active"><img src="images/mobius-functionmode-menuB.png" class="img-fluid figure-img" alt="Mobius with Menu B active"></a></p>
-<figcaption>Mobius with Menu B active</figcaption>
+<p><a href="images/mobius-functionmode-menuB.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" data-glightbox="description: .lightbox-desc-4" title="Möbius with Menu B active"><img src="images/mobius-functionmode-menuB.png" class="img-fluid figure-img" alt="Möbius with Menu B active"></a></p>
+<figcaption>Möbius with Menu B active</figcaption>
 </figure>
 </div>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="images/mobius-functionmode-TapMode.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" data-glightbox="description: .lightbox-desc-5" title="Mobius with Tempo Tap Mode active"><img src="images/mobius-functionmode-TapMode.png" class="img-fluid figure-img" alt="Mobius with Tempo Tap Mode active"></a></p>
-<figcaption>Mobius with Tempo Tap Mode active</figcaption>
+<p><a href="images/mobius-functionmode-TapMode.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" data-glightbox="description: .lightbox-desc-5" title="Möbius with Tempo Tap Mode active"><img src="images/mobius-functionmode-TapMode.png" class="img-fluid figure-img" alt="Möbius with Tempo Tap Mode active"></a></p>
+<figcaption>Möbius with Tempo Tap Mode active</figcaption>
 </figure>
 </div>
 </div>
@@ -300,20 +334,49 @@ ul.task-list li input[type="checkbox"] {
 <section id="installation-steps" class="level2">
 <h2 class="anchored" data-anchor-id="installation-steps">Installation Steps</h2>
 <ol type="1">
-<li>Copy the msl scripts to the <code>scripts</code> folder.</li>
-<li>Open mobius and go to Display -&gt; Edit Layouts… -&gt; Floating Track Strip</li>
-</ol>
+<li><p>Copy the msl scripts to the <code>scripts</code> folder.</p></li>
+<li><p>For some reason you can only add the new widgets defined by <code>SheeranXLib.msl</code> to the “Floating Track Strip” tab if you to try and add them via <code>Display -&gt; Edit Layouts...</code>. To get round this you have to manually edit the <code>uiconfig.xml</code> file.</p>
 <ol type="i">
-<li>Drag MuteModeLabel, MuteModeLight, fmodeLabel, fmodeLight, fmenuALabel, fmenuBLabel and fmenuTapLabel from the right panel to the left panel.</li>
+<li>Go to Möbius’ Configuration Root folder (which you can find by selecting <code>Help -&gt; About</code>) and open the <code>uiconfig.xml</code> file in a text editor. Look for the section of text that looks a bit like this:</li>
+</ol>
+<div class="sourceCode" id="cb1"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">UIConfig</span><span class="ot"> windowWidth=</span><span class="st">"1164"</span><span class="ot"> windowHeight=</span><span class="st">"764"</span><span class="ot"> activeButtonSet=</span><span class="st">"Default"</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ot">      activeLayout=</span><span class="st">"Default"</span>&gt;</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a> &lt;<span class="kw">Layout</span><span class="ot"> name=</span><span class="st">"Default"</span>&gt;</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Element</span><span class="ot"> name=</span><span class="st">"ModeElement"</span><span class="ot"> x=</span><span class="st">"688"</span><span class="ot"> y=</span><span class="st">"182"</span>/&gt;</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Element</span><span class="ot"> name=</span><span class="st">"BeatersElement"</span><span class="ot"> x=</span><span class="st">"514"</span><span class="ot"> y=</span><span class="st">"132"</span>/&gt;</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Element</span><span class="ot"> name=</span><span class="st">"LoopMeterElement"</span><span class="ot"> x=</span><span class="st">"454"</span><span class="ot"> y=</span><span class="st">"179"</span>/&gt;</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Element</span><span class="ot"> name=</span><span class="st">"CounterElement"</span><span class="ot"> x=</span><span class="st">"456"</span><span class="ot"> y=</span><span class="st">"90"</span>/&gt;</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Element</span><span class="ot"> name=</span><span class="st">"FloatingStripElement"</span><span class="ot"> x=</span><span class="st">"847"</span><span class="ot"> y=</span><span class="st">"58"</span>/&gt;</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Element</span><span class="ot"> name=</span><span class="st">"ParametersElement"</span><span class="ot"> x=</span><span class="st">"12"</span><span class="ot"> y=</span><span class="st">"34"</span>/&gt;</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Element</span><span class="ot"> name=</span><span class="st">"AudioMeterElement"</span><span class="ot"> x=</span><span class="st">"456"</span><span class="ot"> y=</span><span class="st">"259"</span>/&gt;</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Element</span><span class="ot"> name=</span><span class="st">"LayerElement"</span><span class="ot"> x=</span><span class="st">"436"</span><span class="ot"> y=</span><span class="st">"288"</span>/&gt;</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Element</span><span class="ot"> name=</span><span class="st">"AlertElement"</span><span class="ot"> x=</span><span class="st">"365"</span><span class="ot"> y=</span><span class="st">"387"</span><span class="ot"> height=</span><span class="st">"64"</span>/&gt;</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Element</span><span class="ot"> name=</span><span class="st">"MinorModesElement"</span><span class="ot"> x=</span><span class="st">"437"</span><span class="ot"> y=</span><span class="st">"57"</span>/&gt;</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Element</span><span class="ot"> name=</span><span class="st">"TempoElement"</span><span class="ot"> x=</span><span class="st">"438"</span><span class="ot"> y=</span><span class="st">"31"</span>/&gt;</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Element</span><span class="ot"> name=</span><span class="st">"LoopWindowElement"</span><span class="ot"> x=</span><span class="st">"452"</span><span class="ot"> y=</span><span class="st">"343"</span>/&gt;</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Element</span><span class="ot"> name=</span><span class="st">"HostSync"</span><span class="ot"> x=</span><span class="st">"15"</span><span class="ot"> y=</span><span class="st">"246"</span><span class="ot"> width=</span><span class="st">"290"</span><span class="ot"> height=</span><span class="st">"53"</span>/&gt;</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Element</span><span class="ot"> name=</span><span class="st">"MidiSync"</span><span class="ot"> x=</span><span class="st">"17"</span><span class="ot"> y=</span><span class="st">"317"</span><span class="ot"> width=</span><span class="st">"291"</span><span class="ot"> height=</span><span class="st">"51"</span>/&gt;</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Element</span><span class="ot"> name=</span><span class="st">"Transport"</span><span class="ot"> x=</span><span class="st">"15"</span><span class="ot"> y=</span><span class="st">"392"</span><span class="ot"> width=</span><span class="st">"288"</span><span class="ot"> height=</span><span class="st">"51"</span>/&gt;</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Strip</span><span class="ot"> name=</span><span class="st">"Docked"</span>&gt;</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">Element</span><span class="ot"> name=</span><span class="st">"trackNumber"</span>/&gt;</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">Element</span><span class="ot"> name=</span><span class="st">"loopRadar"</span>/&gt;</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">Element</span><span class="ot"> name=</span><span class="st">"loopStack"</span>/&gt;</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">Element</span><span class="ot"> name=</span><span class="st">"output"</span>/&gt;</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">Element</span><span class="ot"> name=</span><span class="st">"outputMeter"</span>/&gt;</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">Strip</span>&gt;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Insert the following extra lines of text immediately before the line that says <code>&lt;Strip name="Docked"&gt;</code></p>
+<ol start="2" type="i">
+<li>From the “Floating Track Strip” tab, drag MuteModeLabel, MuteModeLight, fmodeLabel, fmodeLight, fmenuALabel, fmenuBLabel and fmenuTapLabel from the right panel to the left panel and then click on Save.</li>
+</ol></li>
 </ol>
 
 
 <div class="hidden" aria-hidden="true">
-<span class="glightbox-desc lightbox-desc-1">Mobius with the new UI widgets added</span>
-<span class="glightbox-desc lightbox-desc-2">Mobius with Mute Mode active</span>
-<span class="glightbox-desc lightbox-desc-3">Mobius with Menu A active</span>
-<span class="glightbox-desc lightbox-desc-4">Mobius with Menu B active</span>
-<span class="glightbox-desc lightbox-desc-5">Mobius with Tempo Tap Mode active</span>
+<span class="glightbox-desc lightbox-desc-1">Möbius with the new UI widgets added</span>
+<span class="glightbox-desc lightbox-desc-2">Möbius with Mute Mode active</span>
+<span class="glightbox-desc lightbox-desc-3">Möbius with Menu A active</span>
+<span class="glightbox-desc lightbox-desc-4">Möbius with Menu B active</span>
+<span class="glightbox-desc lightbox-desc-5">Möbius with Tempo Tap Mode active</span>
 </div>
 </section>
 
@@ -850,7 +913,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","selector":".lightbox","closeEffect":"zoom","loop":false,"openEffect":"zoom"});
+<script>var lightboxQuarto = GLightbox({"loop":false,"descPosition":"bottom","closeEffect":"zoom","openEffect":"zoom","selector":".lightbox"});
 window.onload = () => {
   lightboxQuarto.on('slide_before_load', (data) => {
     const { slideIndex, slideNode, slideConfig, player, trigger } = data;
