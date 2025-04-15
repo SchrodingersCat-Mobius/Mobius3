@@ -3,15 +3,16 @@ project:
   output-dir: docs
 
 website:
+  favicon: images/logo.png
   title: "Schrödinger's Cat's Möbius 3 Site"
   navbar:
+    logo: images/logo.png 
     left:
       - href: index.qmd
         text: Home
   sidebar:
     style: docked
     contents: 
-      - index.qmd
       - auto: "*.qmd"
     
 format:

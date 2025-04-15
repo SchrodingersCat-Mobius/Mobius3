@@ -1,0 +1,7 @@
+---
+title: "Looper X Emulation"
+---
+
+I'm posting some notes about my initial attempts to "emulate" the Sheeran Looper X within Möbius.  I don't actually own of those, but the User Manual is available online at <https://cdn.inmusicbrands.com/sheeran/looper-x/Sheeran%20Looper%20X%20-%20User%20Guide%20-%20v1.0.0.pdf> and I've been using that to understand how it operates.
+ 
+

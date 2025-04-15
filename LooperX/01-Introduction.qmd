@@ -1,0 +1,55 @@
+---
+title: "Introduction"
+---
+
+Looping can be done in one of five modes:
+
+1. Multi Mode (4 synchronized tracks locked to the same length),
+2. Sync Mode (4 synchronized tracks which must be integer multiples or fractions of the primary track),
+3. Song Mode (4 tracks of potentially different lengths which can be played independently of each other),
+4. Band Mode (1 track acts as a backing loop, while the other 3 are played independently over the backing loop and must be integer multiples of fractions of the track providing the backing loop),
+5. Free mode (4 un-synced free-form tracks)
+
+At this stage I'm only trying to emulate what would happen if the Looper X was looping in Sync Mode which seems to most naturally align to how I have been using Möbius so far.
+
+At its core, the Looper X is basically a four track looper (with only one loop per track) and eight foot pedals arranged in two rows of four. The top row of pedals are labelled as Track 1/A, Track 2/B, Track 3/C and Track 4/D, whilst the bottom row has RECORD+PLAY, STOP, MODE and FUNCTION pedals.  However, the pedals have multiple functions depending on the current state of the looper. Because of this I'll also refer to the physical buttons/pedals as Pedals 1-4 (top row) and Pedals 5-8 (bottom row).
+
+## Looper X Pedal Behaviour: 
+
+**Pedals 1-4:** Pressing one of Track Pedals 1-4 (A-D) selects the corresponding Track, whilst double-pressing solos the corresponding Track.
+
+**Pedal 5:** Pressing the RECORD+PLAY pedal is used to record, overdub, and start playback of the currently selected Track.  By default the order is Record, Overdub, Play but this can be change to Record, Play, Overdub (which is my preferred order).
+Pressing and holding this pedal undoes the last layer recorded.
+
+**Pedal 6:** Pressing the STOP pedal (when looping is in Sync mode) stops all the Tracks.  Pressing and holding Clears all the tracks.
+
+**Pedal 7:** Pressing the MODE pedal puts the looper into "Mute Mode". When in "Mute Mode" Pedals 1-4 Mute/Unmute the corresponding Track. Pressing the MODE pedal a second time puts the looper back into normal operation.  Pressing and holding is used to change the looper mode or access additional menu pages. (I'm not interested in implementing this behaviour.)
+
+**Pedal 8:** Pressing the FUNCTION pedal accesses additional looping operations and machine functions. A single press re-maps the 8 pedals to perform a set of "Menu A" functions (1. Tuner, 2. FX, 3. Load, 4. Save, 5. Peel, 6. Clear All, 7. Clear Track 8. Exit).  Press and hold re-maps the 8 pedals to perform a set of "Menu B" functions (1. Bounce, 2. Multiply, 3. Speed, 4. Backing Track, 5. Transpose, 6. Fade, 7. Reverse 8. Exit).   Double-pressing the FUNCTION pedal enables "tap tempo". While "tap tempo" is enabled, pressing the RECORD + PLAY pedal (Pedal 5) is used to set the desired tempo. When finished, pressing the FUNCTION pedal again exits "tap tempo" mode.
+
+Once you are in one of the Menu A or Menu B modes selecting functions may then involve further re-mapping of the pedal behaviour.   
+
+To simplify things, I'm also assuming that I am using Möbius as a standalone app, that I've configured it to have 4 Audio Tracks and only 1 Loop per Track,  SyncHost=Transport for Track 1, and SyncHost=Track for the others, and  then SyncUnit=Loop, TrackSyncUnit=Loop, Quantize=Off, and SwitchQuantize=Off for all Tracks.
+
+I decided to create a separate script for each pedal controlling that pedal's behaviour as well as a separate script setting up the global variables, visual lights and labels that provide the connection between the pedal scripts and what appears in the Möbius display to show the current state of the emulated Looper X (9 scripts in total).
+
+The scripts make use of 4 global variables (mmode, fmode, fmenuA, fmenuB and fmenuTap) which are used to keep track of current "Mode" of the looper. (Click on any image to enlarge it.)
+
+
+::: {layout-ncol=2}
+![Möbius with the new UI widgets added](images/mobius-initial.png){.lightbox}
+
+![Möbius with Mute Mode active](images/mobius-mutemode.png){.lightbox}
+:::
+
+::: {layout-ncol=3}
+![Möbius with Menu A active](images/mobius-functionmode-menuA.png){.lightbox}
+
+![Möbius with Menu B active](images/mobius-functionmode-menuB.png){.lightbox}
+
+![Möbius with Tempo Tap Mode active](images/mobius-functionmode-TapMode.png){.lightbox}
+:::
+
+	
+
+

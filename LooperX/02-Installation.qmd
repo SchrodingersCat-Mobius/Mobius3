@@ -1,0 +1,53 @@
+---
+title: "Installation"
+---
+
+1. Copy the msl scripts to the `scripts` folder.
+2. For some reason if you try and add the the new widgets defined by `SheeranXLib.msl` via  `Display -> Edit Layouts...` you can only add them to the "Floating Track Strip". I've found you can get round this by manually editing the `uiconfig.xml` file.
+	i. Go to Möbius' Configuration Root folder (which you can find by selecting `Help -> About`) and open the `uiconfig.xml` file in a text editor.  (Don't forget to make a back up copy the `uiconfig.xml` file  before editing it.)
+	
+	ii. Look for the section of text that looks a bit like this:
+	```xml
+	<UIConfig windowWidth="1164" windowHeight="764" activeButtonSet="Default"
+			  activeLayout="Default">
+	  <Layout name="Default">
+        <Element name="ModeElement" x="688" y="182"/>
+        <Element name="BeatersElement" x="514" y="132"/>
+        <Element name="LoopMeterElement" x="454" y="179"/>
+        <Element name="CounterElement" x="456" y="90"/>
+        <Element name="FloatingStripElement" x="847" y="58"/>
+        <Element name="ParametersElement" x="12" y="34"/>
+        <Element name="AudioMeterElement" x="456" y="259"/>
+        <Element name="LayerElement" x="436" y="288"/>
+        <Element name="AlertElement" x="365" y="387" height="64"/>
+        <Element name="MinorModesElement" x="437" y="57"/>
+        <Element name="TempoElement" x="438" y="31"/>
+        <Element name="LoopWindowElement" x="452" y="343"/>
+        <Element name="HostSync" x="15" y="246" width="290" height="53"/>
+        <Element name="MidiSync" x="17" y="317" width="291" height="51"/>
+        <Element name="Transport" x="15" y="392" width="288" height="51"/>
+        <Strip name="Docked">
+          <Element name="trackNumber"/>
+          <Element name="loopRadar"/>
+          <Element name="loopStack"/>
+          <Element name="output"/>
+          <Element name="outputMeter"/>
+        </Strip>
+	```
+	
+	iii. Insert the following extra lines of text immediately before the line that says `<Strip name="Docked">`. In my case this is just after the `<Element name="Transport" x="15" y="392" width="288" height="51"/>` line.
+	
+	```xml
+	    <Element name="MuteModeLight" x="935" y="115" width="50" height="20"/>
+        <Element name="MuteModeLabel" x="985" y="115" width="68" height="20"/>
+        <Element name="fmodeLight" x="935" y="145" width="50" height="20"/>
+        <Element name="fmodeLabel" x="985" y="145" width="95" height="20"/>
+        <Element name="fmenuALabel" x="1080" y="145" width="15" height="20"/>
+        <Element name="fmenuBLabel" x="1095" y="145" width="15" height="20"/>
+        <Element name="fmenuTapLabel" x="1110" y="145" width="25" height="20"/>
+	```
+
+	iv. Save the file and exit.
+	vi. Open Möbius. (You should now see the extra widgets to the right hand side of the Möbius display.) 
+
+
