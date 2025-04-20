@@ -1,0 +1,10 @@
+#name SheeranXPedal6
+#sustain
+
+if fmode equals 0{
+  in all {Stop}
+}
+
+function OnSustain() {
+  in all {if fmode equals 0 {Reset}}
+}

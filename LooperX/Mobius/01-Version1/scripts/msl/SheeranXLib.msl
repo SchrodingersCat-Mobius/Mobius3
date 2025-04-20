@@ -1,0 +1,27 @@
+#name Sheeran Looper X Library
+#library
+
+init{
+   InstallUIElement("fmodeLight","fmode" :Light :onColor :white :offColor :gray)
+   InstallUIElement("fmodeLabel","fmode" :Text  :text "Function Mode:"  :width 80 :onColor :white :offColor :gray)
+   InstallUIElement("fmenuALabel","fmenuA" :Text  :text "A"  :width 80 :onColor :white :offColor :gray)
+   InstallUIElement("fmenuBLabel","fmenuB" :Text  :text "B"  :width 80 :onColor :white :offColor :gray)
+   InstallUIElement("fmenuTapLabel","fmenuTap" :Text  :text "Tap"  :width 80 :onColor :white :offColor :gray)  
+   InstallUIElement("MuteModeLight","mutemode" :Light :onColor :white :offColor :gray)
+   InstallUIElement("MuteModeLabel","mutemode" :Text  :text "Mute Mode" :width 80 :onColor :white :offColor :gray)
+}
+
+/*
+Use export statements to declare global variables used to capture the emulated states of the Looper X
+fmode values: 0 (normal behaviour), 1 (Function Menu A), 2 (Function Menu B) or 3 (Tap Tempo Mode)
+fmenuA values: 1 (Function Menu A On), 0 (Function Menu A Off)
+fmenuB values: 1 (Function Menu B On), 0(Function Menu B Off)
+fmenuTap values: 1 (Tap Tempo Mode On), 0((Tap Tempo Mode Off)
+mutemode values: 1 (Mute Mode On), 0 (Mute Mode Off)
+*/
+
+export variable fmode
+export variable fmenuA 
+export variable fmenuB 
+export variable fmenuTap
+export variable mutemode

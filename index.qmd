@@ -12,4 +12,4 @@ Welcome to my website dedicated to Jeffrey Larson's amazing Möbius 3 programmab
 
 If you're looking for the software you should go to Jeff's site.  <https://mobiuslooper.com/>
 
-What you can find here are notes I have written on programming the software to emulate some of the behaviour of the Sheeran Looper X.
+What you can find here at the moment are notes I have written on programming the software to emulate some of the behaviour of the Sheeran Looper X.

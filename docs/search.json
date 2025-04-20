@@ -1,79 +1,196 @@
 [
   {
-    "objectID": "LooperX/msl scripts/09-Pedal8.html",
-    "href": "LooperX/msl scripts/09-Pedal8.html",
-    "title": "Pedal8.msl",
+    "objectID": "LooperX/Mobius/index.html",
+    "href": "LooperX/Mobius/index.html",
+    "title": "Background",
     "section": "",
-    "text": "#name Pedal8\n#sustain\n#repeat\n\n//Pedal 8 is labelled FUNCTION on Sheeran X Looper\n\n//When Looper X is in normal mode (fmode=0) Press puts Looper X into Menu A Mode (fmode=0, fmenuA=0, fmenuB=0, fmenuTap=0)\n//When Looper X is not in normal mode (fmode=1) Press puts Looper X into normal mode (fmode=1, fmenuA=1, fmenuB=0, fmenuTap=0)\n//Press and Hold allows the Looper X to toggle between Menu A and Menu B modes\n//Double Press puts the Looper X into Tap Tempo mode (Tapping the RECORD+PLAY pedal is then used to set the tempo)\n\nif fmode equals 0{\n  fmode = 1\n  fmenuA = 1\n  fmenuB = 0\n  fmenuTap = 0\n}else{\n  fmode = 0\n  fmenuA = 0\n  fmenuB = 0\n  fmenuTap = 0\n}\n\nfunction OnSustain(sustainCount){\n  if fmode equals 2{\n    fmode = 1\n    fmenuA = 1\n     fmenuB = 0\n     fmenuTap = 0    \n  }else{\n    fmode = 2\n    fmenuA = 0\n    fmenuB = 1\n    fmenuTap = 0\n  }\n}\n\nfunction OnRepeat(repeatCount){\n  fmode = 3\n  fmenuA = 0\n  fmenuB = 0\n fmenuTap = 1\n}",
+    "text": "To implement some “Looper X behaviour” in Möbius, my plan was to make some simplifying assumptions about how I would have Möbius set up. To make it as “Looper X” like as possible I decided to assume that Möbius was going to be used as a standalone app and would be pre-configured in the following way:\nI’m also going to have added HostSync, MidiSync and Transport to the Main Elements display using Display &gt; Edit Layouts..., going to the Main Elements tab and dragging them from the right to the left panel. I’ve then re-sized and re-positioned them as well as the Floating Track Strip as you can see in the image below:",
     "crumbs": [
-      "Home",
-      "Looper X Emulation",
-      "msl scripts",
-      "Pedal8.msl"
+      "Sheeran Looper X",
+      "Möbius Implementations",
+      "Background"
     ]
   },
   {
-    "objectID": "LooperX/msl scripts/07-Pedal6.html",
-    "href": "LooperX/msl scripts/07-Pedal6.html",
-    "title": "Pedal6.msl",
-    "section": "",
-    "text": "#name Pedal6\n#sustain 1200\n\n//Pedal 6 is labelled STOP on Sheeran X Looper\n\n//When Looper X is in normal mode (fmode=0) Press immediately stops all tracks\n//When Looper X is in normal mode (fmode=0) Press and Holdclears all tracks\n\nif fmode==0{in all {Stop}}\n\nfunction OnSustain() {\n     in all {if fmode == 0 {Reset}}\n}",
+    "objectID": "LooperX/Mobius/index.html#möbius-scripting",
+    "href": "LooperX/Mobius/index.html#möbius-scripting",
+    "title": "Background",
+    "section": "Möbius Scripting",
+    "text": "Möbius Scripting\nBecause of the multi-functionality of the Looper X’s pedals, we will need to use one of Möbius’ scripting languages to create scripts that define how the individual pedals operate. There also needs to be a mechanism for keeping track of the current state of the emulation and displaying that information within the Möbius application window. Fortunately, the newer MSL scripting language has introduced the ability to create UI widgets. As only, MSL has this ability we will be creating MSL scripts.\n\nUI Widget Scripting\nAt the time of writing, I am using Build 40 of Möbius. This build has a “Light” widget and a “Text” widget. The “Light” widget provides an on/off light in the form of a rectangular block which can be controlled to change colour depending on the state of a monitored variable whilst the “Text” widget replaces the rectangular block with a text label but it otherwise the same. We create these widgets using the ÌnstallUIElement`function in MSL using the syntax shown below.\n   InstallUIElement(\"nameforLightWidget\", \"nameOfMonitoredVariable\" :Light :onColor :white :offColor :gray)\n   InstallUIElement(\"nameforTextWidget\", \"nameOfMonitoredVariable\" :Text  :text \"text label\"  :width 80 :onColor :white :offColor :gray)\n\nBoth UI widgets assume that that the monitored variable has only two possible values.\nThe text label for the text widget is fixed and must be given as a text string, you can’t use the name of a variable containing a text string.\nMany but not all of Juce’s colour names will be considered valid by the InstallUIElement function. (When a colour is not considered valid it is replaced by white.)\n\nTo define the widgets in a script to make them available we wrap them inside an initstatement and add export variable statements to make the monitoring variable available to any other scripts that might need it.\n#name widgetLibraryName\n#library \n\ninit{\n     InstallUIElement(\"nameforLightWidget\", \"nameOfMonitoredVariable\" :Light  :onColor :white :offColor :gray)\n     InstallUIElement(\"nameforTextWidget\", \"nameOfMonitoredVariable\" :Text  :text \"text label\"  :width 80  :onColor :white :offColor :gray)\n}\n\nexport variable nameOfMonitoredVariable\n\n\nUI Widget Installation\nAdding the above as a script in Möbius makes the two widgets available to display. To make them appear you need to use Display &gt; Edit Layouts... to add them to the application window. In Build 40, you only seem to be able to add the widgets to the Floating Track Strip or the Docked Track Strip using this method. In the figure below I’ve added them to both the Floating Track Strip and the Docked Track Strip.\n\n\n\nThe Möbius application window with added UI Light and Text Widgets\n\n\nOnly being able to add the widgets to the Floating Track Strip or the Docked Track Strip is a serious limitation. However, there is a workaround if you are prepared to edit the uiconfig.xml file.\nGo to Möbius’ Configuration Root folder (which you can find by selecting Help -&gt; About) and after closing Möbius, open the uiconfig.xml file in a text editor.\n\n\n\n\n\n\nWarning\n\n\n\nAlways make a back up copy of the uiconfig.xml file before attempting to edit it.\nDon’t edit uiconfig.xml while Möbius is running. If you do, the changes you have made will be overwritten when you close Möbius.\n\n\n&lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt;\n\n&lt;UIConfig windowWidth=\"1200\" windowHeight=\"800\" activeButtonSet=\"Default\"\n          activeLayout=\"Default\"&gt;\n  &lt;Layout name=\"Default\"&gt;\n    &lt;Element name=\"ModeElement\" x=\"688\" y=\"182\"/&gt;\n    &lt;Element name=\"BeatersElement\" x=\"514\" y=\"132\"/&gt;\n    &lt;Element name=\"LoopMeterElement\" x=\"454\" y=\"179\"/&gt;\n    &lt;Element name=\"CounterElement\" x=\"456\" y=\"90\"/&gt;\n    &lt;Element name=\"FloatingStripElement\" x=\"845\" y=\"44\"/&gt;\n    &lt;Element name=\"ParametersElement\" x=\"15\" y=\"34\"/&gt;\n    &lt;Element name=\"AudioMeterElement\" x=\"456\" y=\"259\"/&gt;\n    &lt;Element name=\"LayerElement\" x=\"436\" y=\"288\"/&gt;\n    &lt;Element name=\"AlertElement\" x=\"365\" y=\"431\"/&gt;\n    &lt;Element name=\"MinorModesElement\" x=\"437\" y=\"57\"/&gt;\n    &lt;Element name=\"TempoElement\" x=\"438\" y=\"31\"/&gt;\n    &lt;Element name=\"LoopWindowElement\" x=\"452\" y=\"343\"/&gt;\n    &lt;Element name=\"HostSync\" x=\"15\" y=\"200\" width=\"290\" height=\"50\"/&gt;\n    &lt;Element name=\"MidiSync\" x=\"15\" y=\"260\" width=\"290\" height=\"50\"/&gt;\n    &lt;Element name=\"Transport\" x=\"15\" y=\"320\" width=\"290\" height=\"50\"/&gt;\n1    &lt;Strip name=\"Docked\"&gt;\n      &lt;Element name=\"trackNumber\"/&gt;\n      &lt;Element name=\"loopRadar\"/&gt;\n      &lt;Element name=\"loopStack\"/&gt;\n      &lt;Element name=\"output\"/&gt;\n      &lt;Element name=\"outputMeter\"/&gt;\n    &lt;/Strip&gt;\n    &lt;Strip name=\"Floating\"&gt;\n      &lt;Element name=\"input\"/&gt;\n      &lt;Element name=\"output\"/&gt;\n      &lt;Element name=\"feedback\"/&gt;\n      &lt;Element name=\"pan\"/&gt;\n    &lt;/Strip&gt;\n    &lt;InstantParameters names=\"trackOverlay,activeButtons,activeLayout,quantize,subcycles,switchQuantize,emptyLoopAction\"/&gt;\n  &lt;/Layout&gt;\n  &lt;ButtonSet name=\"Default\"&gt;\n    &lt;Button action=\"GlobalReset\"/&gt;\n    &lt;Button action=\"Reset\"/&gt;\n    &lt;Button action=\"Record\"/&gt;\n    &lt;Button action=\"Overdub\"/&gt;\n    &lt;Button action=\"Undo\"/&gt;\n    &lt;Button action=\"Mute\"/&gt;\n    &lt;Button action=\"NextLoop\"/&gt;\n    &lt;Button action=\"PrevLoop\"/&gt;\n    &lt;Button action=\"Reverse\"/&gt;\n    &lt;Button action=\"Halfspeed\"/&gt;\n  &lt;/ButtonSet&gt;\n  &lt;Properties&gt;\n    &lt;Property name=\"mainWindow\" value=\"0,0,1200,800\"/&gt;\n    &lt;Property name=\"scriptWindow\" value=\"20,40,400,800\"/&gt;\n  &lt;/Properties&gt;\n  &lt;ElementDefinition name=\"nameforLightWidget\" visualizer=\"Light\" area=\"strip,main\"&gt;\n    &lt;Properties&gt;\n      &lt;Property name=\"monitor\" value=\"nameOfMonitoredVariable\"/&gt;\n      &lt;Property name=\"offColor\" value=\"gray\"/&gt;\n      &lt;Property name=\"onColor\" value=\"white\"/&gt;\n    &lt;/Properties&gt;\n  &lt;/ElementDefinition&gt;\n  &lt;ElementDefinition name=\"nameforTextWidget\" visualizer=\"Text\" area=\"strip,main\"&gt;\n    &lt;Properties&gt;\n      &lt;Property name=\"monitor\" value=\"nameOfMonitoredVariable\"/&gt;\n      &lt;Property name=\"offColor\" value=\"gray\"/&gt;\n      &lt;Property name=\"onColor\" value=\"white\"/&gt;\n      &lt;Property name=\"text\" value=\"text label\"/&gt;\n      &lt;Property name=\"width\" value=\"80\"/&gt;\n    &lt;/Properties&gt;\n  &lt;/ElementDefinition&gt;\n&lt;/UIConfig&gt;\n\n1\n\nInsert the following text immediately above the &lt;Strip name=\"Docked\"&gt; line and save the uiconfig.xml file.\n\n\n&lt;Element name=\"nameforLightWidget\" x=\"925\" y=\"60\" width=\"67\" height=\"20\"/&gt;\n&lt;Element name=\"nameforTextWidget\" x=\"925\" y=\"100\" width=\"67\" height=\"20\"/&gt;\nIf you have done this correctly, when you open Möbius, you should see the Light Widget and the Text Widget to the right of the Floating Track Strip as below.\n\n\n\nThe Möbius application window with floating UI Light and Text Widgets\n\n\nNow we have a mechanism for adding a Light or Text label to the main display of Möbius, we need to write further scripts to control the behaviour of the individual pedals.\n\n\nPedal Scripting\nPedal scripting is just a matter of writing separate scripts to control each of the pedals that make use of the global variables we have defined when setting up the UI widgets in the Widget Library script.",
     "crumbs": [
-      "Home",
-      "Looper X Emulation",
-      "msl scripts",
-      "Pedal6.msl"
+      "Sheeran Looper X",
+      "Möbius Implementations",
+      "Background"
     ]
   },
   {
-    "objectID": "LooperX/msl scripts/05-Pedal4.html",
-    "href": "LooperX/msl scripts/05-Pedal4.html",
-    "title": "Pedal4.msl",
+    "objectID": "LooperX/Mobius/02-Version2/msl scripts/08-Pedal7.html",
+    "href": "LooperX/Mobius/02-Version2/msl scripts/08-Pedal7.html",
+    "title": "Pedal7.msl",
     "section": "",
-    "text": "#name Pedal4\n#sustain\n#repeat\n\n//When Mute Mode is off (mmode=0) pressing pedal 4 selects Track 4\n//When Mute mode is on (mmode=1) pressing pedal 4 Selects Track 4 and then Mutes/Unmutes it.\n\nSelectTrack(4)\n\n//in 4 Mute is used here as workaround for a bug where the active track is muted before switching to Track 4\nif mmode equals 1{\n  in 4 Mute\n}\n\nfunction OnSustain(sustainCount){\n \n}\n\n//Double press of Pedal 4 solos Track 4\nfunction OnRepeat(repeatCount){\n  in 1 MuteOn\n  in 2 MuteOn\n  in 3 MuteOn\n  in 4 MuteOff\n}",
+    "text": "#name Pedal7\n//Pedal 7 is labelled MODE on Sheeran X Looper\n\n// Press and hold changes the looper mode on Sheeran X Looper but this is not implemented here.\n\n//When Looper X is not in mute mode (mmode=0) Press puts Looper X into Mute Mode\n//When Looper X is in mute mode (mmode=1) Press exits Mute Mode\n//Press and Hold allows the Looper X to change looper mode (not implemented yet)\n\nif mmode equals 0{\n  mmode = 1\n}\nelse{\n  mmode = 0\n}"
+  },
+  {
+    "objectID": "LooperX/Mobius/02-Version2/msl scripts/06-Pedal5.html",
+    "href": "LooperX/Mobius/02-Version2/msl scripts/06-Pedal5.html",
+    "title": "Pedal5.msl",
+    "section": "",
+    "text": "#name Pedal5\n#sustain 1200\n\n//Pedal 5 is labelled RECORD+PLAY on Sheeran Looper X\n\n//When Looper X is in normal mode (fmode=0) Press does Record/Overdub/Play\n//When Looper X is in normal mode (fmode=0) Press and Hold does an Undo\n\n//When Looper X is in Menu A mode (fmode=1) Press enters \"Peel Mode\" (not yet implemented)\n//When Looper X is in Menu B mode (fmode=2) Press enters \"Transpose Mode\" (not yet implemented)\n//When Looper X is in Menu B mode (fmode=3) Press enters \"Tap Tempo Mode\" (equivalent to triggering TransportTap)\n\nif fmode == 0{\n  case mode {\n    :Reset Record\n    :Record Overdub\n    :Overdub Play\n    :Play Overdub\n    :Mute Play\n    else print(\"Unhandled mode\" mode)\n  }\n}\n\nelse if fmode == 1{\n  print \"Entering PEEL mode\"\n}\n\nelse if fmode == 2{\n  print \"Entering TRANSPOSE mode\"\n}\n\nelse{\n  TransportTap\n}\n\nfunction OnSustain(sustainCount sustainElapsed) {\n     if fmode == 0 Undo   \n}"
+  },
+  {
+    "objectID": "LooperX/Mobius/02-Version2/msl scripts/04-Pedal3.html",
+    "href": "LooperX/Mobius/02-Version2/msl scripts/04-Pedal3.html",
+    "title": "Pedal3.msl",
+    "section": "",
+    "text": "#name Pedal3\n#sustain\n#repeat\n\n//When Mute Mode is off (mmode=0) pressing pedal 3 selects Track 3\n//When Mute mode is on (mmode=1) pressing pedal 3 Selects Track 3 and then Mutes/Unmutes it.\n\nSelectTrack(3)\n\n//in 3 Mute is used here as workaround for a bug where the active track is muted before switching to Track 3\nif mmode equals 1{\n  in 3 Mute\n}\n\nfunction OnSustain(sustainCount){\n \n}\n\n//Double press of Pedal 3 solos Track 3\nfunction OnRepeat(repeatCount){\n  in 1 MuteOn\n  in 2 MuteOn\n  in 3 MuteOff\n  in 4 MuteOn\n}"
+  },
+  {
+    "objectID": "LooperX/Mobius/02-Version2/msl scripts/02-Pedal1.html",
+    "href": "LooperX/Mobius/02-Version2/msl scripts/02-Pedal1.html",
+    "title": "Pedal1.msl",
+    "section": "",
+    "text": "#name Pedal1\n#sustain\n#repeat\n\n//When Mute Mode is off (mmode=0) pressing pedal 1 selects Track 1\n//When Mute mode is on (mmode=1) pressing pedal 1 Selects Track 1 and then Mutes/Unmutes it.\n\nSelectTrack(1)\n\n//in 1 Mute is used here as workaround for a bug where the active track is muted before switching to Track 1\nif mmode equals 1{\n  in 1 Mute\n}\n\nfunction OnSustain(sustainCount){\n \n}\n\n//Double press of Pedal 1 solos Track 1\nfunction OnRepeat(repeatCount){\n  in 1 MuteOff\n  in 2 MuteOn\n  in 3 MuteOn\n  in 4 MuteOn\n}"
+  },
+  {
+    "objectID": "LooperX/Mobius/01-Version1/scripts/scripts.html",
+    "href": "LooperX/Mobius/01-Version1/scripts/scripts.html",
+    "title": "MSL Scripts",
+    "section": "",
+    "text": "#name Sheeran Looper X Library\n#library\n\ninit{\n   InstallUIElement(\"fmodeLight\",\"fmode\" :Light :onColor :white :offColor :gray)\n   InstallUIElement(\"fmodeLabel\",\"fmode\" :Text  :text \"Function Mode:\"  :width 80 :onColor :white :offColor :gray)\n   InstallUIElement(\"fmenuALabel\",\"fmenuA\" :Text  :text \"A\"  :width 80 :onColor :white :offColor :gray)\n   InstallUIElement(\"fmenuBLabel\",\"fmenuB\" :Text  :text \"B\"  :width 80 :onColor :white :offColor :gray)\n   InstallUIElement(\"fmenuTapLabel\",\"fmenuTap\" :Text  :text \"Tap\"  :width 80 :onColor :white :offColor :gray)  \n   InstallUIElement(\"MuteModeLight\",\"mutemode\" :Light :onColor :white :offColor :gray)\n   InstallUIElement(\"MuteModeLabel\",\"mutemode\" :Text  :text \"Mute Mode\" :width 80 :onColor :white :offColor :gray)\n}\n\n/*\nUse export statements to declare global variables used to capture the emulated states of the Looper X\nfmode values: 0 (normal behaviour), 1 (Function Menu A), 2 (Function Menu B) or 3 (Tap Tempo Mode)\nfmenuA values: 1 (Function Menu A On), 0 (Function Menu A Off)\nfmenuB values: 1 (Function Menu B On), 0(Function Menu B Off)\nfmenuTap values: 1 (Tap Tempo Mode On), 0((Tap Tempo Mode Off)\nmutemode values: 1 (Mute Mode On), 0 (Mute Mode Off)\n*/\n\nexport variable fmode\nexport variable fmenuA \nexport variable fmenuB \nexport variable fmenuTap\nexport variable mutemode",
     "crumbs": [
-      "Home",
-      "Looper X Emulation",
-      "msl scripts",
-      "Pedal4.msl"
+      "Sheeran Looper X",
+      "Möbius Implementations",
+      "Basic Version",
+      "MSL Scripts"
     ]
   },
   {
-    "objectID": "LooperX/msl scripts/03-Pedal2.html",
-    "href": "LooperX/msl scripts/03-Pedal2.html",
-    "title": "Pedal2.msl",
+    "objectID": "LooperX/Mobius/01-Version1/scripts/scripts.html#sheeranxlib.msl",
+    "href": "LooperX/Mobius/01-Version1/scripts/scripts.html#sheeranxlib.msl",
+    "title": "MSL Scripts",
     "section": "",
-    "text": "#name Pedal2\n#sustain\n#repeat\n\n//When Mute Mode is off (mmode=0) pressing pedal 2 selects Track 2\n//When Mute mode is on (mmode=1) pressing pedal 2 Selects Track 2 and then Mutes/Unmutes it.\n\nSelectTrack(2)\n\n//in 2 Mute is used here as workaround for a bug where the active track is muted before switching to Track 2\nif mmode equals 1{\n  in 2 Mute\n}\n\nfunction OnSustain(sustainCount){\n \n}\n\n//Double press of Pedal 2 solos Track 2\nfunction OnRepeat(repeatCount){\n  in 1 MuteOn\n  in 2 MuteOff\n  in 3 MuteOn\n  in 4 MuteOn\n}",
+    "text": "#name Sheeran Looper X Library\n#library\n\ninit{\n   InstallUIElement(\"fmodeLight\",\"fmode\" :Light :onColor :white :offColor :gray)\n   InstallUIElement(\"fmodeLabel\",\"fmode\" :Text  :text \"Function Mode:\"  :width 80 :onColor :white :offColor :gray)\n   InstallUIElement(\"fmenuALabel\",\"fmenuA\" :Text  :text \"A\"  :width 80 :onColor :white :offColor :gray)\n   InstallUIElement(\"fmenuBLabel\",\"fmenuB\" :Text  :text \"B\"  :width 80 :onColor :white :offColor :gray)\n   InstallUIElement(\"fmenuTapLabel\",\"fmenuTap\" :Text  :text \"Tap\"  :width 80 :onColor :white :offColor :gray)  \n   InstallUIElement(\"MuteModeLight\",\"mutemode\" :Light :onColor :white :offColor :gray)\n   InstallUIElement(\"MuteModeLabel\",\"mutemode\" :Text  :text \"Mute Mode\" :width 80 :onColor :white :offColor :gray)\n}\n\n/*\nUse export statements to declare global variables used to capture the emulated states of the Looper X\nfmode values: 0 (normal behaviour), 1 (Function Menu A), 2 (Function Menu B) or 3 (Tap Tempo Mode)\nfmenuA values: 1 (Function Menu A On), 0 (Function Menu A Off)\nfmenuB values: 1 (Function Menu B On), 0(Function Menu B Off)\nfmenuTap values: 1 (Tap Tempo Mode On), 0((Tap Tempo Mode Off)\nmutemode values: 1 (Mute Mode On), 0 (Mute Mode Off)\n*/\n\nexport variable fmode\nexport variable fmenuA \nexport variable fmenuB \nexport variable fmenuTap\nexport variable mutemode",
     "crumbs": [
-      "Home",
-      "Looper X Emulation",
-      "msl scripts",
-      "Pedal2.msl"
+      "Sheeran Looper X",
+      "Möbius Implementations",
+      "Basic Version",
+      "MSL Scripts"
     ]
   },
   {
-    "objectID": "LooperX/msl scripts/01-SheeranXLib.html",
-    "href": "LooperX/msl scripts/01-SheeranXLib.html",
-    "title": "SheeranXLib.msl",
-    "section": "",
-    "text": "#name Sheeran Looper X Library\n#library\n\n//Library script to emulate the Sheeran Looper X\n// (Still a work in progress)\n\n/*\nUse init statement to create a block of InstallUIElement statements to provide various widgets which can be \ndisplayed in Mobius window\n*/\n\ninit{\n    InstallUIElement(\"fmodeLight\",\"fmode\" :Light :onColor :white :offColor :gray)\n   InstallUIElement(\"fmodeLabel\",\"fmode\" :Text  :text \"Function Mode:\"  :width 80 :onColor :white :offColor :gray)\n   InstallUIElement(\"fmenuALabel\",\"fmenuA\" :Text  :text \"A\"  :width 80 :onColor :white :offColor :gray)\n   InstallUIElement(\"fmenuBLabel\",\"fmenuB\" :Text  :text \"B\"  :width 80 :onColor :white :offColor :gray)\n   InstallUIElement(\"fmenuTapLabel\",\"fmenuTap\" :Text  :text \"Tap\"  :width 80 :onColor :white :offColor :gray)\n   \n   InstallUIElement(\"MuteModeLight\",\"mmode\" :Light :onColor :white :offColor :gray)\n   InstallUIElement(\"MuteModeLabel\",\"mmode\" :Text  :text \"Mute Mode\" :width 80 :onColor :white :offColor :gray)\n}\n\n/*\nUse export statements to declare global variables used to capture the emulated states of the Looper X\nfmode: takes value 0, 1, 2 or 3\n    fmode=0: Looper X is in its normal state\n   fmode=1: Looper X has entered Menu A\n    fmode=2: Looper X has entered MenuB\n    fmode=3: Looper X in Tap Tempo mode\nfmenuA: takes values 0,1\n    fmenuA=0: Looper X is not in Menu A mode\n    fmenuA=1: Looper X is in Menu A mode\nfmenuB: takes values 0,1\n    fmenuB=0: Looper X is not in Menu B mode\n    fmenuB=1: Looper X is in Menu B mode\nfmenuTap: takes values 0,1\n    fmenuTap=0: Looper X is not in Tap Tempo mode\n    fmenuTap=1: Looper X is in Tap Tempo mode\nmmode: takes value 0,1\n    mmode=0: Looper X is not in Mute Mode\n   mmode=1: Looper X is in Mute mode\n*/\n\nexport variable fmode\nexport variable fmenuA \nexport variable fmenuB \nexport variable fmenuTap\nexport variable mmode",
+    "objectID": "LooperX/Mobius/01-Version1/scripts/scripts.html#sheeranxpedal1.msl",
+    "href": "LooperX/Mobius/01-Version1/scripts/scripts.html#sheeranxpedal1.msl",
+    "title": "MSL Scripts",
+    "section": "SheeranXPedal1.msl",
+    "text": "SheeranXPedal1.msl\n#name SheeranXPedal1\n#repeat\n\n//When Mute Mode is off (mutemode=0) pressing pedal 1 selects Track 1\n//When Mute mode is on (mutemode=1) pressing pedal 1 Selects Track 1 and then Mutes/Unmutes it.\n\nif mutemode equals 0{\n  SelectTrack(1)\n}\nelse\n{\n  in 1 Mute\n}\n\n//Double press of Pedal 1 solos Track 1\nfunction OnRepeat(repeatCount){\n  in 1 Solo\n}",
     "crumbs": [
-      "Home",
-      "Looper X Emulation",
-      "msl scripts",
-      "SheeranXLib.msl"
+      "Sheeran Looper X",
+      "Möbius Implementations",
+      "Basic Version",
+      "MSL Scripts"
     ]
   },
   {
-    "objectID": "LooperX/02-Installation.html",
-    "href": "LooperX/02-Installation.html",
-    "title": "Installation",
-    "section": "",
-    "text": "Copy the msl scripts to the scripts folder.\nFor some reason if you try and add the the new widgets defined by SheeranXLib.msl via Display -&gt; Edit Layouts... you can only add them to the “Floating Track Strip”. I’ve found you can get round this by manually editing the uiconfig.xml file.\n\nGo to Möbius’ Configuration Root folder (which you can find by selecting Help -&gt; About) and open the uiconfig.xml file in a text editor. (Don’t forget to make a back up copy the uiconfig.xml file before editing it.)\nLook for the section of text that looks a bit like this:\n\n&lt;UIConfig windowWidth=\"1164\" windowHeight=\"764\" activeButtonSet=\"Default\"\n          activeLayout=\"Default\"&gt;\n  &lt;Layout name=\"Default\"&gt;\n    &lt;Element name=\"ModeElement\" x=\"688\" y=\"182\"/&gt;\n    &lt;Element name=\"BeatersElement\" x=\"514\" y=\"132\"/&gt;\n    &lt;Element name=\"LoopMeterElement\" x=\"454\" y=\"179\"/&gt;\n    &lt;Element name=\"CounterElement\" x=\"456\" y=\"90\"/&gt;\n    &lt;Element name=\"FloatingStripElement\" x=\"847\" y=\"58\"/&gt;\n    &lt;Element name=\"ParametersElement\" x=\"12\" y=\"34\"/&gt;\n    &lt;Element name=\"AudioMeterElement\" x=\"456\" y=\"259\"/&gt;\n    &lt;Element name=\"LayerElement\" x=\"436\" y=\"288\"/&gt;\n    &lt;Element name=\"AlertElement\" x=\"365\" y=\"387\" height=\"64\"/&gt;\n    &lt;Element name=\"MinorModesElement\" x=\"437\" y=\"57\"/&gt;\n    &lt;Element name=\"TempoElement\" x=\"438\" y=\"31\"/&gt;\n    &lt;Element name=\"LoopWindowElement\" x=\"452\" y=\"343\"/&gt;\n    &lt;Element name=\"HostSync\" x=\"15\" y=\"246\" width=\"290\" height=\"53\"/&gt;\n    &lt;Element name=\"MidiSync\" x=\"17\" y=\"317\" width=\"291\" height=\"51\"/&gt;\n    &lt;Element name=\"Transport\" x=\"15\" y=\"392\" width=\"288\" height=\"51\"/&gt;\n    &lt;Element name=\"MuteModeLight\" x=\"935\" y=\"115\" width=\"50\" height=\"20\"/&gt;\n    &lt;Element name=\"MuteModeLabel\" x=\"985\" y=\"115\" width=\"68\" height=\"20\"/&gt;\n    &lt;Element name=\"fmodeLight\" x=\"935\" y=\"145\" width=\"50\" height=\"20\"/&gt;\n    &lt;Element name=\"fmodeLabel\" x=\"985\" y=\"145\" width=\"95\" height=\"20\"/&gt;\n    &lt;Element name=\"fmenuALabel\" x=\"1080\" y=\"145\" width=\"15\" height=\"20\"/&gt;\n    &lt;Element name=\"fmenuBLabel\" x=\"1095\" y=\"145\" width=\"15\" height=\"20\"/&gt;\n    &lt;Element name=\"fmenuTapLabel\" x=\"1110\" y=\"145\" width=\"25\" height=\"20\"/&gt;\n    &lt;Strip name=\"Docked\"&gt;\n      &lt;Element name=\"trackNumber\"/&gt;\n      &lt;Element name=\"loopRadar\"/&gt;\n      &lt;Element name=\"loopStack\"/&gt;\n      &lt;Element name=\"output\"/&gt;\n      &lt;Element name=\"outputMeter\"/&gt;\n    &lt;/Strip&gt;\n\nInsert the following extra lines of text immediately before the line that says &lt;Strip name=\"Docked\"&gt;. In my case this is just after the &lt;Element name=\"Transport\" x=\"15\" y=\"392\" width=\"288\" height=\"51\"/&gt; line.\n\n    &lt;Element name=\"MuteModeLight\" x=\"935\" y=\"115\" width=\"50\" height=\"20\"/&gt;\n    &lt;Element name=\"MuteModeLabel\" x=\"985\" y=\"115\" width=\"68\" height=\"20\"/&gt;\n    &lt;Element name=\"fmodeLight\" x=\"935\" y=\"145\" width=\"50\" height=\"20\"/&gt;\n    &lt;Element name=\"fmodeLabel\" x=\"985\" y=\"145\" width=\"95\" height=\"20\"/&gt;\n    &lt;Element name=\"fmenuALabel\" x=\"1080\" y=\"145\" width=\"15\" height=\"20\"/&gt;\n    &lt;Element name=\"fmenuBLabel\" x=\"1095\" y=\"145\" width=\"15\" height=\"20\"/&gt;\n    &lt;Element name=\"fmenuTapLabel\" x=\"1110\" y=\"145\" width=\"25\" height=\"20\"/&gt;\n\nSave the file and exit.\nOpen Möbius. (You should now see the extra widgets to the right hand side of the Möbius display.)",
+    "objectID": "LooperX/Mobius/01-Version1/scripts/scripts.html#sheeranxpedal2.msl",
+    "href": "LooperX/Mobius/01-Version1/scripts/scripts.html#sheeranxpedal2.msl",
+    "title": "MSL Scripts",
+    "section": "SheeranXPedal2.msl",
+    "text": "SheeranXPedal2.msl\n#name SheeranXPedal2\n#repeat\n\n//When Mute Mode is off (mutemode=0) pressing pedal 2 selects Track 2\n//When Mute mode is on (mutemode=1) pressing pedal 2 Selects Track 2 and then Mutes/Unmutes it.\n\nif mutemode equals 0{\n  SelectTrack(2)\n}\nelse\n{\n  in 2 Mute\n}\n\n//Double press of Pedal 2 solos Track 2\nfunction OnRepeat(repeatCount){\n  in 2 Solo\n}",
     "crumbs": [
-      "Home",
-      "Looper X Emulation",
-      "Installation"
+      "Sheeran Looper X",
+      "Möbius Implementations",
+      "Basic Version",
+      "MSL Scripts"
+    ]
+  },
+  {
+    "objectID": "LooperX/Mobius/01-Version1/scripts/scripts.html#sheeranxpedal3.msl",
+    "href": "LooperX/Mobius/01-Version1/scripts/scripts.html#sheeranxpedal3.msl",
+    "title": "MSL Scripts",
+    "section": "SheeranXPedal3.msl",
+    "text": "SheeranXPedal3.msl\n#name SheeranXPedal3\n#repeat\n\n//When Mute Mode is off (mutemode=0) pressing pedal 3 selects Track 3\n//When Mute mode is on (mutemode=1) pressing pedal 3 Selects Track 3 and then Mutes/Unmutes it.\n\nif mutemode equals 0{\n  SelectTrack(3)\n}\nelse\n{\n  in 3 Mute\n}\n\n//Double press of Pedal 3 solos Track 3\nfunction OnRepeat(repeatCount){\n  in 3 Solo\n}",
+    "crumbs": [
+      "Sheeran Looper X",
+      "Möbius Implementations",
+      "Basic Version",
+      "MSL Scripts"
+    ]
+  },
+  {
+    "objectID": "LooperX/Mobius/01-Version1/scripts/scripts.html#sheeranxpedal4.msl",
+    "href": "LooperX/Mobius/01-Version1/scripts/scripts.html#sheeranxpedal4.msl",
+    "title": "MSL Scripts",
+    "section": "SheeranXPedal4.msl",
+    "text": "SheeranXPedal4.msl\n#name SheeranXPedal4\n#repeat\n\n//When Mute Mode is off (mutemode=0) pressing pedal 4 selects Track 4\n//When Mute mode is on (mutemode=1) pressing pedal 4 Selects Track 4 and then Mutes/Unmutes it.\n\nif mutemode equals 0{\n  SelectTrack(4)\n}\nelse\n{\n  in 4 Mute\n}\n\n//Double press of Pedal 4 solos Track 4\nfunction OnRepeat(repeatCount){\n  in 4 Solo\n}",
+    "crumbs": [
+      "Sheeran Looper X",
+      "Möbius Implementations",
+      "Basic Version",
+      "MSL Scripts"
+    ]
+  },
+  {
+    "objectID": "LooperX/Mobius/01-Version1/scripts/scripts.html#sheeranxpedal5.msl",
+    "href": "LooperX/Mobius/01-Version1/scripts/scripts.html#sheeranxpedal5.msl",
+    "title": "MSL Scripts",
+    "section": "SheeranXPedal5.msl",
+    "text": "SheeranXPedal5.msl\n#name SheeranXPedal5\n#sustain\n\nif fmode equals 0{\n  case mode {\n    :Reset Record\n    :Record Overdub\n    :Overdub Play\n    :Play Overdub\n    :Mute Play\n    else print(\"Unhandled mode\" mode)\n  }\n}\nelse if fmenuTap{\n  TransportTap\n}\n\nfunction OnSustain(sustainCount sustainElapsed) {\n     if fmode equals 0 Undo   \n}",
+    "crumbs": [
+      "Sheeran Looper X",
+      "Möbius Implementations",
+      "Basic Version",
+      "MSL Scripts"
+    ]
+  },
+  {
+    "objectID": "LooperX/Mobius/01-Version1/scripts/scripts.html#sheeranxpedal6.msl",
+    "href": "LooperX/Mobius/01-Version1/scripts/scripts.html#sheeranxpedal6.msl",
+    "title": "MSL Scripts",
+    "section": "SheeranXPedal6.msl",
+    "text": "SheeranXPedal6.msl\n#name SheeranXPedal6\n#sustain\n\nif fmode equals 0{\n  in all {Stop}\n}\n\nfunction OnSustain() {\n  in all {if fmode equals 0 {Reset}}\n}",
+    "crumbs": [
+      "Sheeran Looper X",
+      "Möbius Implementations",
+      "Basic Version",
+      "MSL Scripts"
+    ]
+  },
+  {
+    "objectID": "LooperX/Mobius/01-Version1/scripts/scripts.html#sheeranxpedal7.msl",
+    "href": "LooperX/Mobius/01-Version1/scripts/scripts.html#sheeranxpedal7.msl",
+    "title": "MSL Scripts",
+    "section": "SheeranXPedal7.msl",
+    "text": "SheeranXPedal7.msl\n#name Pedal7\n\nif mutemode equals 0{\n  mutemode = 1\n}\nelse{\n  mutemode = 0\n}",
+    "crumbs": [
+      "Sheeran Looper X",
+      "Möbius Implementations",
+      "Basic Version",
+      "MSL Scripts"
+    ]
+  },
+  {
+    "objectID": "LooperX/Mobius/01-Version1/scripts/scripts.html#sheeranxpedal8.msl",
+    "href": "LooperX/Mobius/01-Version1/scripts/scripts.html#sheeranxpedal8.msl",
+    "title": "MSL Scripts",
+    "section": "SheeranXPedal8.msl",
+    "text": "SheeranXPedal8.msl\n#name SheeranXPedal8\n#sustain\n#repeat\n\nif fmode equals 0{\n  fmode = 1\n  fmenuA = 1\n  fmenuB = 0\n  fmenuTap = 0\n}else{\n  fmode = 0\n  fmenuA = 0\n  fmenuB = 0\n  fmenuTap = 0\n}\n\nfunction OnSustain(sustainCount){\n  if fmode equals 2{\n    fmode = 1\n    fmenuA = 1\n    fmenuB = 0\n    fmenuTap = 0     \n  }else{\n    fmode = 2\n    fmenuA = 0\n    fmenuB = 1\n    fmenuTap = 0\n  }\n}\n\nfunction OnRepeat(repeatCount){\n  fmode = 3\n  fmenuA = 0\n  fmenuB = 0\n  fmenuTap = 1\n}",
+    "crumbs": [
+      "Sheeran Looper X",
+      "Möbius Implementations",
+      "Basic Version",
+      "MSL Scripts"
+    ]
+  },
+  {
+    "objectID": "LooperX/Mobius/01-Version1/index.html",
+    "href": "LooperX/Mobius/01-Version1/index.html",
+    "title": "Basic Version",
+    "section": "",
+    "text": "This version implements the following aspects of Looper X behaviour:\n\nPedals 1-4 work as expected when in Normal Mode or Mute Mode\nPedal 5 works as expected when in Normal Mode, Mute Mode or Tap Tempo\nPedal 6 works as expected when in Normal Mode\nPedal 7 works as expected when in Normal Mode or Mute Mode\nPedal 8 works as expected when in Normal Mode and can be used to switch between Function Menu A and Function Menu B\n\nThis is achieved by a set of nine msl scripts (one UI Widget Library script, and eight individual pedal scripts.)\nBelow are some images of how the implementation looks in Möbius. (Click on any image to enlarge it.)\n\n\n\n\n\n\n\n\n\nNormal Mode: Pedals 1-4 select corresponding tracks or solo them if double pressed. Pedal 5 acts as Rec/Play/Overdub pedal with Undo if held. Pedal 6 stops all tracks and clears them if held. Pedal 7 enters Mute Mode. Pedal 8 enters Menu A, Tap Tempo Mode if double pressed and toggles between Menu B and Menu A if held.\n\n\n\n\n\n\n\nMute Mode: Pedals 1-4 Mute/Unmute the corresponding track or solo them if double pressed. Pedal 7 exits Mute Mode.\n\n\n\n\n\n\n\n\n\nMenu A active: Pedal 8 exits Menu A if pressed and toggles between Menu A and Menu B if held. No other functionality is implemented.\n\n\n\n\n\n\n\nMenu B active: Pedal 8 exits Menu A if pressed and toggles between Menu A and Menu B if held. No other functionality is implemented.\n\n\n\n\n\n\n\n\n\nTap Tempo Mode active: Double tapping Pedal 5 sets the Tempo in the Transport. Pedal 8 exits Tap Tempo Mode.\n\n\n\n\n\n\n\n\nNormal Mode: Pedals 1-4 select corresponding tracks or solo them if double pressed. Pedal 5 acts as Rec/Play/Overdub pedal with Undo if held. Pedal 6 stops all tracks and clears them if held. Pedal 7 enters Mute Mode. Pedal 8 enters Menu A, Tap Tempo Mode if double pressed and toggles between Menu B and Menu A if held.\nMute Mode: Pedals 1-4 Mute/Unmute the corresponding track or solo them if double pressed. Pedal 7 exits Mute Mode.\nMenu A active: Pedal 8 exits Menu A if pressed and toggles between Menu A and Menu B if held. No other functionality is implemented.\nMenu B active: Pedal 8 exits Menu A if pressed and toggles between Menu A and Menu B if held. No other functionality is implemented.\nTap Tempo Mode active: Double tapping Pedal 5 sets the Tempo in the Transport. Pedal 8 exits Tap Tempo Mode.",
+    "crumbs": [
+      "Sheeran Looper X",
+      "Möbius Implementations",
+      "Basic Version"
     ]
   },
   {
@@ -81,93 +198,90 @@
     "href": "index.html",
     "title": "Welcome",
     "section": "",
-    "text": "Welcome to my website dedicated to Jeffrey Larson’s amazing Möbius 3 programmable looper software.\nIf you’re looking for the software you should go to Jeff’s site. https://mobiuslooper.com/\nWhat you can find here are notes I have written on programming the software to emulate some of the behaviour of the Sheeran Looper X."
-  },
-  {
-    "objectID": "LooperX/01-Introduction.html",
-    "href": "LooperX/01-Introduction.html",
-    "title": "Introduction",
-    "section": "",
-    "text": "Looping can be done in one of five modes:\nAt this stage I’m only trying to emulate what would happen if the Looper X was looping in Sync Mode which seems to most naturally align to how I have been using Möbius so far.\nAt its core, the Looper X is basically a four track looper (with only one loop per track) and eight foot pedals arranged in two rows of four. The top row of pedals are labelled as Track 1/A, Track 2/B, Track 3/C and Track 4/D, whilst the bottom row has RECORD+PLAY, STOP, MODE and FUNCTION pedals. However, the pedals have multiple functions depending on the current state of the looper. Because of this I’ll also refer to the physical buttons/pedals as Pedals 1-4 (top row) and Pedals 5-8 (bottom row).",
+    "text": "Welcome to my website dedicated to Jeffrey Larson’s amazing Möbius 3 programmable looper software.\nIf you’re looking for the software you should go to Jeff’s site. https://mobiuslooper.com/\nWhat you can find here at the moment are notes I have written on programming the software to emulate some of the behaviour of the Sheeran Looper X.",
     "crumbs": [
-      "Home",
-      "Looper X Emulation",
-      "Introduction"
-    ]
-  },
-  {
-    "objectID": "LooperX/01-Introduction.html#looper-x-pedal-behaviour",
-    "href": "LooperX/01-Introduction.html#looper-x-pedal-behaviour",
-    "title": "Introduction",
-    "section": "Looper X Pedal Behaviour:",
-    "text": "Looper X Pedal Behaviour:\nPedals 1-4: Pressing one of Track Pedals 1-4 (A-D) selects the corresponding Track, whilst double-pressing solos the corresponding Track.\nPedal 5: Pressing the RECORD+PLAY pedal is used to record, overdub, and start playback of the currently selected Track. By default the order is Record, Overdub, Play but this can be change to Record, Play, Overdub (which is my preferred order). Pressing and holding this pedal undoes the last layer recorded.\nPedal 6: Pressing the STOP pedal (when looping is in Sync mode) stops all the Tracks. Pressing and holding Clears all the tracks.\nPedal 7: Pressing the MODE pedal puts the looper into “Mute Mode”. When in “Mute Mode” Pedals 1-4 Mute/Unmute the corresponding Track. Pressing the MODE pedal a second time puts the looper back into normal operation. Pressing and holding is used to change the looper mode or access additional menu pages. (I’m not interested in implementing the Press and Hold behaviour.)\nPedal 8: Pressing the FUNCTION pedal accesses additional looping operations and machine functions. A single press re-maps the 8 pedals to perform a set of “Menu A” functions (1. Tuner, 2. FX, 3. Load, 4. Save, 5. Peel, 6. Clear All, 7. Clear Track, and 8. Exit). Press and hold re-maps the 8 pedals to perform a set of “Menu B” functions (1. Bounce, 2. Multiply, 3. Speed, 4. Backing Track, 5. Transpose, 6. Fade, 7. Reverse, and 8. Exit). Double-pressing the FUNCTION pedal enables “tap tempo”. While “tap tempo” is enabled, pressing the RECORD + PLAY pedal (Pedal 5) is used to set the desired tempo. When finished, pressing the FUNCTION pedal again exits “tap tempo” mode.\nOnce you are in one of the Menu A or Menu B modes selecting functions may then involve further re-mapping of the pedal behaviour.\nTo simplify things, I’m also assuming that I am using Möbius as a standalone app, that I’ve configured it to have 4 Audio Tracks and only 1 Loop per Track, SyncHost=Transport for Track 1, SyncHost=Track for Tracks 2-4, and then SyncUnit=Loop, TrackSyncUnit=Loop, Quantize=Off, and SwitchQuantize=Off for all Tracks.\nI decided to create a separate script for each pedal as well as a separate script setting up the global variables, visual lights and labels that provide the connection between the pedal scripts and what appears in the Möbius display (9 scripts in total).\nThe scripts make use of 4 global variables (mmode, fmode, fmenuA, fmenuB and fmenuTap) which are used to keep track of the current “Mode” of the looper. (Click on any image to enlarge it.)\n\n\n\n\n\n\n\n\n\nMöbius with the new UI widgets added\n\n\n\n\n\n\n\nMöbius with Mute Mode active\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMöbius with Menu A active\n\n\n\n\n\n\n\nMöbius with Menu B active\n\n\n\n\n\n\n\nMöbius with Tempo Tap Mode active\n\n\n\n\n\n\n\n\nMöbius with the new UI widgets added\nMöbius with Mute Mode active\nMöbius with Menu A active\nMöbius with Menu B active\nMöbius with Tempo Tap Mode active",
-    "crumbs": [
-      "Home",
-      "Looper X Emulation",
-      "Introduction"
+      "Home"
     ]
   },
   {
     "objectID": "LooperX/index.html",
     "href": "LooperX/index.html",
-    "title": "Looper X Emulation",
+    "title": "Schrödinger's Cat's Möbius 3 Site",
     "section": "",
-    "text": "I’m posting some notes about my initial attempts to “emulate” the Sheeran Looper X within Möbius. I don’t actually own of those, but the User Manual is available online at https://cdn.inmusicbrands.com/sheeran/looper-x/Sheeran%20Looper%20X%20-%20User%20Guide%20-%20v1.0.0.pdf and I’ve been using that to understand how it operates.",
+    "text": "I don’t actually own of these, but the User Manual is available online at https://cdn.inmusicbrands.com/sheeran/looper-x/Sheeran%20Looper%20X%20-%20User%20Guide%20-%20v1.0.0.pdf and I’ve been using that to understand how it operates.\nAs you can see from the image above, the Looper X is basically a four track looper with eight foot pedals arranged in two rows of four.\nThe top row of pedals are labelled as TRACK 1/A, TRACK 2/B, TRACK 3/C and TRACK 4/D, whilst the bottom row has RECORD+PLAY, STOP, MODE and FUNCTION pedals. The pedals have multiple functions depending on the current mode of the looper. Because of this I’ll also refer to them as Pedals 1-4 (top row) and Pedals 5-8 (bottom row).\nThe Looper X has five different looping modes based on how the separate tracks are synchronized with each other.\n\nMulti Mode (4 synchronized tracks locked to the same length),\nSync Mode (4 synchronized tracks which must be integer multiples or fractions of the primary track),\nSong Mode (4 tracks of potentially different lengths which can be played independently of each other),\nBand Mode (1 track acts as a backing loop, while the other 3 are played independently over the backing loop and must be integer multiples of fractions of the track providing the backing loop),\nFree mode (4 un-synced free-form tracks)\n\nI’ve only tried to emulate the Looper X’s Sync Mode since this seems to be the most naturally aligned mode to how I use Möbius 3.\nBe aware that the use of the word mode in the context of looping is distinct from the use of the word mode when referring to pedal behaviour. In subsequent sections where I refer to mode I am almost always referring to pedal behaviour.",
     "crumbs": [
-      "Home",
-      "Looper X Emulation"
+      "Sheeran Looper X",
+      "Introduction"
     ]
   },
   {
-    "objectID": "LooperX/msl scripts/02-Pedal1.html",
-    "href": "LooperX/msl scripts/02-Pedal1.html",
-    "title": "Pedal1.msl",
+    "objectID": "LooperX/index.html#introduction",
+    "href": "LooperX/index.html#introduction",
+    "title": "Schrödinger's Cat's Möbius 3 Site",
     "section": "",
-    "text": "#name Pedal1\n#sustain\n#repeat\n\n//When Mute Mode is off (mmode=0) pressing pedal 1 selects Track 1\n//When Mute mode is on (mmode=1) pressing pedal 1 Selects Track 1 and then Mutes/Unmutes it.\n\nSelectTrack(1)\n\n//in 1 Mute is used here as workaround for a bug where the active track is muted before switching to Track 1\nif mmode equals 1{\n  in 1 Mute\n}\n\nfunction OnSustain(sustainCount){\n \n}\n\n//Double press of Pedal 1 solos Track 1\nfunction OnRepeat(repeatCount){\n  in 1 MuteOff\n  in 2 MuteOn\n  in 3 MuteOn\n  in 4 MuteOn\n}",
+    "text": "I don’t actually own of these, but the User Manual is available online at https://cdn.inmusicbrands.com/sheeran/looper-x/Sheeran%20Looper%20X%20-%20User%20Guide%20-%20v1.0.0.pdf and I’ve been using that to understand how it operates.\nAs you can see from the image above, the Looper X is basically a four track looper with eight foot pedals arranged in two rows of four.\nThe top row of pedals are labelled as TRACK 1/A, TRACK 2/B, TRACK 3/C and TRACK 4/D, whilst the bottom row has RECORD+PLAY, STOP, MODE and FUNCTION pedals. The pedals have multiple functions depending on the current mode of the looper. Because of this I’ll also refer to them as Pedals 1-4 (top row) and Pedals 5-8 (bottom row).\nThe Looper X has five different looping modes based on how the separate tracks are synchronized with each other.\n\nMulti Mode (4 synchronized tracks locked to the same length),\nSync Mode (4 synchronized tracks which must be integer multiples or fractions of the primary track),\nSong Mode (4 tracks of potentially different lengths which can be played independently of each other),\nBand Mode (1 track acts as a backing loop, while the other 3 are played independently over the backing loop and must be integer multiples of fractions of the track providing the backing loop),\nFree mode (4 un-synced free-form tracks)\n\nI’ve only tried to emulate the Looper X’s Sync Mode since this seems to be the most naturally aligned mode to how I use Möbius 3.\nBe aware that the use of the word mode in the context of looping is distinct from the use of the word mode when referring to pedal behaviour. In subsequent sections where I refer to mode I am almost always referring to pedal behaviour.",
     "crumbs": [
-      "Home",
-      "Looper X Emulation",
-      "msl scripts",
-      "Pedal1.msl"
+      "Sheeran Looper X",
+      "Introduction"
     ]
   },
   {
-    "objectID": "LooperX/msl scripts/04-Pedal3.html",
-    "href": "LooperX/msl scripts/04-Pedal3.html",
-    "title": "Pedal3.msl",
-    "section": "",
-    "text": "#name Pedal3\n#sustain\n#repeat\n\n//When Mute Mode is off (mmode=0) pressing pedal 3 selects Track 3\n//When Mute mode is on (mmode=1) pressing pedal 3 Selects Track 3 and then Mutes/Unmutes it.\n\nSelectTrack(3)\n\n//in 3 Mute is used here as workaround for a bug where the active track is muted before switching to Track 3\nif mmode equals 1{\n  in 3 Mute\n}\n\nfunction OnSustain(sustainCount){\n \n}\n\n//Double press of Pedal 3 solos Track 3\nfunction OnRepeat(repeatCount){\n  in 1 MuteOn\n  in 2 MuteOn\n  in 3 MuteOff\n  in 4 MuteOn\n}",
+    "objectID": "LooperX/index.html#pedal-behaviour",
+    "href": "LooperX/index.html#pedal-behaviour",
+    "title": "Schrödinger's Cat's Möbius 3 Site",
+    "section": "Pedal Behaviour:",
+    "text": "Pedal Behaviour:\n\nNormal Mode:\nIn normal operation the pedals behave as given in the table below.\n\n\n\n\n\n\n\n\n\n\n\nPedal 1\nPedal 2\nPedal 3\nPedal 4\n\n\n\n\nSingle Press\nSelect Track\nSelect Track\nSelect Track\nSelect Track\n\n\nDouble Press\nSolo Track\nSolo Track\nSolo Track\nSolo Track\n\n\nPress and Hold\n-\n-\n-\n-\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPedal 5\nPedal 6\nPedal 7\nPedal 8\n\n\n\n\nSingle Press\nRecord &gt; Dub &gt; Play\nStop all Tracks\nEnter Mute Mode\nEnter Function Menu A\n\n\nDouble Press\n-\n-\n-\nEnter Tap Tempo\n\n\nPress and Hold\nUndo last overdubbed layer\nClear all Tracks\nChange looping mode\nEnter Function Menu B\n\n\n\n\nPressing Pedal 5 starts recording a loop to the selected track if the track is currently empty. If the track is not empty Pressing Pedal 5 will toggle between playing and overdubbing the track. (Record &gt; Dub &gt; Play is the default order but it is possible to change the looper’s setting to make this Record &gt; Play &gt; Dub if preferred.)\n\n\n\nMute Mode:\n\n\n\n\n\n\n\n\n\n\n\nPedal 1\nPedal 2\nPedal 3\nPedal 4\n\n\n\n\nSingle Press\nMute/Unmute Track\nMute/Unmute Track\nMute/Unmute Track\nMute/Unmute Track\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPedal 5\nPedal 6\nPedal 7\nPedal 8\n\n\n\n\nSingle Press\n-\n-\nExit Mute Mode\n-\n\n\n\n\n\nTap Tempo:\n\n\n\n\n\n\n\n\n\n\n\nPedal 5\nPedal 6\nPedal 7\nPedal 8\n\n\n\n\nSingle Press\n-\n-\n-\nExit Tap Tempo\n\n\nMulti-Tap\nSet Tempo\n-\n-\n-\n\n\n\n\nTempo is set based on the time between taps on Pedal 5.\n\n\n\nFunction Menu A:\nEntering Function Menu A re-maps the looper pedals to give access to the following additional functionality:\n\n\n\n\n\n\n\n\n\n\n\nPedal 1\nPedal 2\nPedal 3\nPedal 4\n\n\n\n\nSingle Press\nTuner\nFX\nLoad\nSave\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPedal 5\nPedal 6\nPedal 7\nPedal 8\n\n\n\n\nSingle Press\nPeel\nClear All Tracks\nClear Track\nExit Function Menu A\n\n\nPress and Hold\n-\n-\n-\nEnter Function Menu B\n\n\n\n\nFX:\nThis gives access to the Looper X’s internal FX processing. It’s possible to assign multiple effects (called FX Racks) at once to an audio input or looper track. Once assigned the FX rack can be toggled on or off using Pedals 1 to 4 to select the corresponding track.\n\n\nLoad:\nThis can be used to load a previously saved looping session into the Looper X. This overwrites anything that is currently in all four tracks. (It is also possible to import individual audio files to each track but this is done via Audio Import on the touch screen and cannot be done via the pedals.)\n\n\nSave:\nThis is used to save the entire looping session.\n\n\nPeel:\nAfter pressing Pedal 5, Pedals 1–4 can be used to permanently “peel off” the last overdubbed layer of a looper track. (I assume that repeated presses of Pedals 1-4 will peel off successively more overdubbed layers from the tracks.)\n\n\nClear Track\nAfter pressing Pedal 7, Pedals 1–4 can be used to clear the contents of individual tracks.\n\n\n\nFunction Menu B:\nEntering Function Menu B re-maps the looper pedals to give access to the following additional functionality:\n\n\n\n\n\n\n\n\n\n\n\nPedal 1\nPedal 2\nPedal 3\nPedal 4\n\n\n\n\nSingle Press\nBounce\nMultiply\nSpeed\nBacking Track\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPedal 5\nPedal 6\nPedal 7\nPedal 8\n\n\n\n\nSingle Press\nTranspose\nFade\nReverse\nExit Function Menu B\n\n\nPress and Hold\n-\n-\n-\nEnter Function Menu A\n\n\n\n\nBounce\nAfter pressing Pedal 1, Pedals 1-4 can be used to which tracks you wish to bounce into a single track. Pressing Pedal 5 confirms the selection of tracks. A subsequent Press of one of Pedals 1-4 is used to determine which track the merged track is assigned to. Pressing Pedal 6 at this stage returns you to the initial track selection. A final Press of Pedal 5 performs the Bounce. Pressing Pedal 8 at any time exits without performing the bounce. (I would assume that any bounced tracks are cleared unless it used as the bounce destination.)\n\n\nMultiply\nAfter pressing Pedal 2, Pedals 1-4 are used to choose which kind of multiply is applied to the active track.\n\n\n\n\n\n\n\n\n\n\n\nPedal 1\nPedal 2\nPedal 3\nPedal 4\n\n\n\n\nSingle Press\n1/2\n2x\n4x\n8x\n\n\n\n\n\nSpeed\nAfter pressing Pedal 3, Pedals 1-4 are used to choose which kind of speed change is applied to the active track.\n\n\n\n\n\n\n\n\n\n\n\nPedal 1\nPedal 2\nPedal 3\nPedal 4\n\n\n\n\nSingle Press\n1/2\n2x\n4x\n8x\n\n\n\n\n\nBacking Track\nThis gives access to a basic audio player which can be used to play a single audio file as a backing track. This feature cannot be used at the same time as looping.\n\n\nTranspose\nAfter pressing Pedal 5, the pedals are re-mapped in the following way:\n\n\n\n\n\n\n\n\n\n\n\nPedal 1\nPedal 2\nPedal 3\nPedal 4\n\n\n\n\nSingle Press\nToggle Track Selection\nToggle Track Selection\nToggle Track Selection\nToggle Track Selection\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPedal 5\nPedal 6\nPedal 7\nPedal 8\n\n\n\n\nSingle Press\nAdjust transposition down a semitone\nAdjust transposition up a semitone\nEnable/Disable transposition for all tracks\nExit Transpose\n\n\n\nPressing of Pedal 5/Pedal 6 increases/decreases the transposition of all selected tracks by one semi-tone. The current cumulative transposition (in semitones) of each track is shown in the on-screen display.\n\n\nFade\nAfter pressing Pedal 5, the pedals are re-mapped in the following way:\n\n\n\n\n\n\n\n\n\n\n\nPedal 1\nPedal 2\nPedal 3\nPedal 4\n\n\n\n\nSingle Press\nToggle Track Selection\nToggle Track Selection\nToggle Track Selection\nToggle Track Selection\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPedal 5\nPedal 6\nPedal 7\nPedal 8\n\n\n\n\nSingle Press\nFade All\nIncrease fade rate\nDecrease fade rate\nExit Fade\n\n\n\nPressing Pedals 1-4 will apply fade in or fade out to that track. Selecting a track that is playing will apply fade out to the track, while selecting a track that is stopped will apply fade in.\nPressing Pedal 5 applies fade in/out to all tracks.\nPressing Pedals 6 and 7 increase or decrease the rate of fade (though it’s not clear whether this is done in fixed steps.)\nThe time taken to perform the fade is shown in the on-screen display.\n\n\nReverse\nPressing Pedals 1-4 reverses the playback direction of the corresponding track.\nPressing Pedal 5 reverses the playback direction of all tracks.",
     "crumbs": [
-      "Home",
-      "Looper X Emulation",
-      "msl scripts",
-      "Pedal3.msl"
+      "Sheeran Looper X",
+      "Introduction"
     ]
   },
   {
-    "objectID": "LooperX/msl scripts/06-Pedal5.html",
-    "href": "LooperX/msl scripts/06-Pedal5.html",
-    "title": "Pedal5.msl",
+    "objectID": "LooperX/Mobius/01-Version1/installation.html",
+    "href": "LooperX/Mobius/01-Version1/installation.html",
+    "title": "Installation",
     "section": "",
-    "text": "#name Pedal5\n#sustain 1200\n\n//Pedal 5 is labelled RECORD+PLAY on Sheeran Looper X\n\n//When Looper X is in normal mode (fmode=0) Press does Record/Overdub/Play\n//When Looper X is in normal mode (fmode=0) Press and Hold does an Undo\n\n//When Looper X is in Menu A mode (fmode=1) Press enters \"Peel Mode\" (not yet implemented)\n//When Looper X is in Menu B mode (fmode=2) Press enters \"Transpose Mode\" (not yet implemented)\n//When Looper X is in Menu B mode (fmode=3) Press enters \"Tap Tempo Mode\" (equivalent to triggering TransportTap)\n\nif fmode == 0{\n  case mode {\n    :Reset Record\n    :Record Overdub\n    :Overdub Play\n    :Play Overdub\n    :Mute Play\n    else print(\"Unhandled mode\" mode)\n  }\n}\n\nelse if fmode == 1{\n  print \"Entering PEEL mode\"\n}\n\nelse if fmode == 2{\n  print \"Entering TRANSPOSE mode\"\n}\n\nelse{\n  TransportTap\n}\n\nfunction OnSustain(sustainCount sustainElapsed) {\n     if fmode == 0 Undo   \n}",
+    "text": "Copy the msl scripts to the scripts folder.\nOpen the uiconfig.xml file i na text editor.\n\n\n\n\n\n\n\nWarning\n\n\n\nAlways make a back up copy of the uiconfig.xml file before attempting to edit it.\nDon’t edit uiconfig.xml while Möbius is running. If you do, the changes you have made will be overwritten when you close Möbius.\n\n\n\nInsert the following extra lines of text immediately before the line that says &lt;Strip name=\"Docked\"&gt;.\n\n    &lt;Element name=\"MuteModeLight\" x=\"935\" y=\"115\" width=\"50\" height=\"20\"/&gt;\n    &lt;Element name=\"MuteModeLabel\" x=\"985\" y=\"115\" width=\"68\" height=\"20\"/&gt;\n    &lt;Element name=\"fmodeLight\" x=\"935\" y=\"145\" width=\"50\" height=\"20\"/&gt;\n    &lt;Element name=\"fmodeLabel\" x=\"985\" y=\"145\" width=\"95\" height=\"20\"/&gt;\n    &lt;Element name=\"fmenuALabel\" x=\"1080\" y=\"145\" width=\"15\" height=\"20\"/&gt;\n    &lt;Element name=\"fmenuBLabel\" x=\"1095\" y=\"145\" width=\"15\" height=\"20\"/&gt;\n    &lt;Element name=\"fmenuTapLabel\" x=\"1110\" y=\"145\" width=\"25\" height=\"20\"/&gt;\n\nSave the file.\nOpen Möbius and enjoy!",
     "crumbs": [
-      "Home",
-      "Looper X Emulation",
-      "msl scripts",
-      "Pedal5.msl"
+      "Sheeran Looper X",
+      "Möbius Implementations",
+      "Basic Version",
+      "Installation"
     ]
   },
   {
-    "objectID": "LooperX/msl scripts/08-Pedal7.html",
-    "href": "LooperX/msl scripts/08-Pedal7.html",
-    "title": "Pedal7.msl",
+    "objectID": "LooperX/Mobius/02-Version2/msl scripts/01-SheeranXLib.html",
+    "href": "LooperX/Mobius/02-Version2/msl scripts/01-SheeranXLib.html",
+    "title": "SheeranXLib.msl",
     "section": "",
-    "text": "#name Pedal7\n//Pedal 7 is labelled MODE on Sheeran X Looper\n\n// Press and hold changes the looper mode on Sheeran X Looper but this is not implemented here.\n\n//When Looper X is not in mute mode (mmode=0) Press puts Looper X into Mute Mode\n//When Looper X is in mute mode (mmode=1) Press exits Mute Mode\n//Press and Hold allows the Looper X to change looper mode (not implemented yet)\n\nif mmode equals 0{\n  mmode = 1\n}\nelse{\n  mmode = 0\n}",
-    "crumbs": [
-      "Home",
-      "Looper X Emulation",
-      "msl scripts",
-      "Pedal7.msl"
-    ]
+    "text": "#name Sheeran Looper X Library\n#library\n\n//Library script to emulate the Sheeran Looper X\n// (Still a work in progress)\n\n/*\nUse init statement to create a block of InstallUIElement statements to provide various widgets which can be \ndisplayed in Mobius window\n*/\n\ninit{\n    InstallUIElement(\"fmodeLight\",\"fmode\" :Light :onColor :white :offColor :gray)\n   InstallUIElement(\"fmodeLabel\",\"fmode\" :Text  :text \"Function Mode:\"  :width 80 :onColor :white :offColor :gray)\n   InstallUIElement(\"fmenuALabel\",\"fmenuA\" :Text  :text \"A\"  :width 80 :onColor :white :offColor :gray)\n   InstallUIElement(\"fmenuBLabel\",\"fmenuB\" :Text  :text \"B\"  :width 80 :onColor :white :offColor :gray)\n   InstallUIElement(\"fmenuTapLabel\",\"fmenuTap\" :Text  :text \"Tap\"  :width 80 :onColor :white :offColor :gray)\n   \n   InstallUIElement(\"MuteModeLight\",\"mmode\" :Light :onColor :white :offColor :gray)\n   InstallUIElement(\"MuteModeLabel\",\"mmode\" :Text  :text \"Mute Mode\" :width 80 :onColor :white :offColor :gray)\n}\n\n/*\nUse export statements to declare global variables used to capture the emulated states of the Looper X\nfmode: takes value 0, 1, 2 or 3\n    fmode=0: Looper X is in its normal state\n   fmode=1: Looper X has entered Menu A\n    fmode=2: Looper X has entered MenuB\n    fmode=3: Looper X in Tap Tempo mode\nfmenuA: takes values 0,1\n    fmenuA=0: Looper X is not in Menu A mode\n    fmenuA=1: Looper X is in Menu A mode\nfmenuB: takes values 0,1\n    fmenuB=0: Looper X is not in Menu B mode\n    fmenuB=1: Looper X is in Menu B mode\nfmenuTap: takes values 0,1\n    fmenuTap=0: Looper X is not in Tap Tempo mode\n    fmenuTap=1: Looper X is in Tap Tempo mode\nmmode: takes value 0,1\n    mmode=0: Looper X is not in Mute Mode\n   mmode=1: Looper X is in Mute mode\n*/\n\nexport variable fmode\nexport variable fmenuA \nexport variable fmenuB \nexport variable fmenuTap\nexport variable mmode"
+  },
+  {
+    "objectID": "LooperX/Mobius/02-Version2/msl scripts/03-Pedal2.html",
+    "href": "LooperX/Mobius/02-Version2/msl scripts/03-Pedal2.html",
+    "title": "Pedal2.msl",
+    "section": "",
+    "text": "#name Pedal2\n#sustain\n#repeat\n\n//When Mute Mode is off (mmode=0) pressing pedal 2 selects Track 2\n//When Mute mode is on (mmode=1) pressing pedal 2 Selects Track 2 and then Mutes/Unmutes it.\n\nSelectTrack(2)\n\n//in 2 Mute is used here as workaround for a bug where the active track is muted before switching to Track 2\nif mmode equals 1{\n  in 2 Mute\n}\n\nfunction OnSustain(sustainCount){\n \n}\n\n//Double press of Pedal 2 solos Track 2\nfunction OnRepeat(repeatCount){\n  in 1 MuteOn\n  in 2 MuteOff\n  in 3 MuteOn\n  in 4 MuteOn\n}"
+  },
+  {
+    "objectID": "LooperX/Mobius/02-Version2/msl scripts/05-Pedal4.html",
+    "href": "LooperX/Mobius/02-Version2/msl scripts/05-Pedal4.html",
+    "title": "Pedal4.msl",
+    "section": "",
+    "text": "#name Pedal4\n#sustain\n#repeat\n\n//When Mute Mode is off (mmode=0) pressing pedal 4 selects Track 4\n//When Mute mode is on (mmode=1) pressing pedal 4 Selects Track 4 and then Mutes/Unmutes it.\n\nSelectTrack(4)\n\n//in 4 Mute is used here as workaround for a bug where the active track is muted before switching to Track 4\nif mmode equals 1{\n  in 4 Mute\n}\n\nfunction OnSustain(sustainCount){\n \n}\n\n//Double press of Pedal 4 solos Track 4\nfunction OnRepeat(repeatCount){\n  in 1 MuteOn\n  in 2 MuteOn\n  in 3 MuteOn\n  in 4 MuteOff\n}"
+  },
+  {
+    "objectID": "LooperX/Mobius/02-Version2/msl scripts/07-Pedal6.html",
+    "href": "LooperX/Mobius/02-Version2/msl scripts/07-Pedal6.html",
+    "title": "Pedal6.msl",
+    "section": "",
+    "text": "#name Pedal6\n#sustain 1200\n\n//Pedal 6 is labelled STOP on Sheeran X Looper\n\n//When Looper X is in normal mode (fmode=0) Press immediately stops all tracks\n//When Looper X is in normal mode (fmode=0) Press and Holdclears all tracks\n\nif fmode==0{in all {Stop}}\n\nfunction OnSustain() {\n     in all {if fmode == 0 {Reset}}\n}"
+  },
+  {
+    "objectID": "LooperX/Mobius/02-Version2/msl scripts/09-Pedal8.html",
+    "href": "LooperX/Mobius/02-Version2/msl scripts/09-Pedal8.html",
+    "title": "Pedal8.msl",
+    "section": "",
+    "text": "#name Pedal8\n#sustain\n#repeat\n\n//Pedal 8 is labelled FUNCTION on Sheeran X Looper\n\n//When Looper X is in normal mode (fmode=0) Press puts Looper X into Menu A Mode (fmode=0, fmenuA=0, fmenuB=0, fmenuTap=0)\n//When Looper X is not in normal mode (fmode=1) Press puts Looper X into normal mode (fmode=1, fmenuA=1, fmenuB=0, fmenuTap=0)\n//Press and Hold allows the Looper X to toggle between Menu A and Menu B modes\n//Double Press puts the Looper X into Tap Tempo mode (Tapping the RECORD+PLAY pedal is then used to set the tempo)\n\nif fmode equals 0{\n  fmode = 1\n  fmenuA = 1\n  fmenuB = 0\n  fmenuTap = 0\n}else{\n  fmode = 0\n  fmenuA = 0\n  fmenuB = 0\n  fmenuTap = 0\n}\n\nfunction OnSustain(sustainCount){\n  if fmode equals 2{\n    fmode = 1\n    fmenuA = 1\n     fmenuB = 0\n     fmenuTap = 0    \n  }else{\n    fmode = 2\n    fmenuA = 0\n    fmenuB = 1\n    fmenuTap = 0\n  }\n}\n\nfunction OnRepeat(repeatCount){\n  fmode = 3\n  fmenuA = 0\n  fmenuB = 0\n fmenuTap = 1\n}"
   }
 ]

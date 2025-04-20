@@ -1,0 +1,29 @@
+---
+title: "Installation"
+---
+
+1. Copy the msl scripts to the `scripts` folder.
+2. Open the `uiconfig.xml` file i na text editor.
+	
+:::{.callout-warning}
+Always make a back up copy of the `uiconfig.xml` file before attempting to edit it.
+
+Don't edit `uiconfig.xml` while Möbius is running.  If you do, the changes you have made will be overwritten when you close Möbius.
+:::	
+
+3. Insert the following extra lines of text immediately before the line that says `<Strip name="Docked">`. 
+
+```xml
+    <Element name="MuteModeLight" x="935" y="115" width="50" height="20"/>
+    <Element name="MuteModeLabel" x="985" y="115" width="68" height="20"/>
+    <Element name="fmodeLight" x="935" y="145" width="50" height="20"/>
+    <Element name="fmodeLabel" x="985" y="145" width="95" height="20"/>
+    <Element name="fmenuALabel" x="1080" y="145" width="15" height="20"/>
+    <Element name="fmenuBLabel" x="1095" y="145" width="15" height="20"/>
+    <Element name="fmenuTapLabel" x="1110" y="145" width="25" height="20"/>
+```
+
+4. Save the file.
+5. Open Möbius and enjoy!
+
+

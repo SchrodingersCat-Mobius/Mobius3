@@ -1,0 +1,18 @@
+#name SheeranXPedal1
+#repeat
+
+//When Mute Mode is off (mutemode=0) pressing pedal 1 selects Track 1
+//When Mute mode is on (mutemode=1) pressing pedal 1 Selects Track 1 and then Mutes/Unmutes it.
+
+if mutemode equals 0{
+  SelectTrack(1)
+}
+else
+{
+  in 1 Mute
+}
+
+//Double press of Pedal 1 solos Track 1
+function OnRepeat(repeatCount){
+  in 1 Solo
+}

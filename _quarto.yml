@@ -7,28 +7,38 @@ website:
   title: "Schrödinger's Cat's Möbius 3 Site"
   navbar:
     logo: images/logo.png 
-    left:
-      - href: index.qmd
-        text: Home
   sidebar:
     style: docked
-    contents: 
-      - auto: "*.qmd"
-    
+    contents:
+      - href: index.qmd
+        text: Home
+      - section: "Sheeran Looper X"
+        contents:
+          - href: "LooperX/index.qmd"
+          - section: "Möbius Implementations"
+            contents: 
+              - href: "LooperX/Mobius/index.qmd"
+              - href: "LooperX/Mobius/01-Version1/index.qmd"
+                contents:
+                  - href: "LooperX/Mobius/01-Version1/scripts/scripts.qmd"
+                  - href: "LooperX/Mobius/01-Version1/installation.qmd"
+  page-navigation: true
 format:
   html:
     theme: 
       light: sandstone
       dark: cyborg
     css: styles.css
-    toc: false
+    toc: true
+    toc-expand: true
+    toc-depth: 3
     code-block-background: true
     code-copy: true
     page-layout: full
     grid:
-      sidebar-width: 250px
+      sidebar-width: 280px
       body-width: 800px
-      margin-width: 250px
+      margin-width: 280px
       gutter-width: 1.5rem
 
 

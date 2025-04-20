@@ -1,0 +1,57 @@
+---
+title: MSL Scripts
+---
+
+## SheeranXLib.msl
+
+```default
+{{< include msl/SheeranXLib.msl >}}
+```
+
+## SheeranXPedal1.msl
+
+```default
+{{< include msl/SheeranXPedal1.msl >}}
+```
+
+## SheeranXPedal2.msl
+
+```default
+{{< include msl/SheeranXPedal2.msl >}}
+```
+
+## SheeranXPedal3.msl
+
+```default
+{{< include msl/SheeranXPedal3.msl >}}
+```
+
+## SheeranXPedal4.msl
+
+```default
+{{< include msl/SheeranXPedal4.msl >}}
+```
+
+## SheeranXPedal5.msl
+
+```default
+{{< include msl/SheeranXPedal5.msl >}}
+```
+
+## SheeranXPedal6.msl
+
+```default
+{{< include msl/SheeranXPedal6.msl >}}
+```
+
+## SheeranXPedal7.msl
+
+```default
+{{< include msl/SheeranXPedal7.msl >}}
+```
+
+## SheeranXPedal8.msl
+
+```default
+{{< include msl/SheeranXPedal8.msl >}}
+```

@@ -1,0 +1,8 @@
+#name Pedal7
+
+if mutemode equals 0{
+  mutemode = 1
+}
+else{
+  mutemode = 0
+}

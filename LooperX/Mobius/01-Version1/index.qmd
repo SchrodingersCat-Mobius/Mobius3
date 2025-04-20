@@ -1,0 +1,30 @@
+---
+title: Basic Version
+---  
+
+This version implements the following aspects of Looper X behaviour:
+
+* Pedals 1-4 work as expected when in [Normal Mode](/LooperX/#normal-mode) or [Mute Mode](/LooperX/#mute-mode)
+* Pedal 5 works as expected when in [Normal Mode](/LooperX/#normal-mode), [Mute Mode](/LooperX/#mute-mode) or [Tap Tempo](/LooperX#tap-tempo)
+* Pedal 6 works as expected when in [Normal Mode](/LooperX/#normal-mode)
+* Pedal 7 works as expected when in [Normal Mode](/LooperX/#normal-mode) or [Mute Mode](/LooperX/#mute-mode)
+* Pedal 8 works as expected when in [Normal Mode](/LooperX/#normal-mode) and can be used to switch between [Function Menu A](/LooperX/#function-menu-a) and [Function Menu B](/LooperX/#function-menu-b)
+
+
+This is achieved by a set of nine msl scripts (one UI Widget Library script, and eight individual pedal scripts.) 
+
+Below are some images of how the implementation looks in Möbius. (Click on any image to enlarge it.)
+
+::: {layout-ncol=2}
+![**Normal Mode:** Pedals 1-4 select corresponding tracks or solo them if double pressed.  Pedal 5 acts as Rec/Play/Overdub pedal with Undo if held. Pedal 6 stops all tracks and clears them if held. Pedal 7 enters Mute Mode. Pedal 8 enters Menu A, Tap Tempo Mode if double pressed and toggles between Menu B and Menu A if held.](images/mobius-initial.png){.lightbox}
+
+![**Mute Mode:** Pedals 1-4 Mute/Unmute the corresponding track or solo them if double pressed.  Pedal 7 exits Mute Mode.](images/mobius-mutemode.png){.lightbox}
+
+![**Menu A active:** Pedal 8 exits Menu A if pressed and toggles between Menu A and Menu B if held. No other functionality is implemented.](images/mobius-functionmode-menuA.png){.lightbox}
+
+![**Menu B active:** Pedal 8 exits Menu A if pressed and toggles between Menu A and Menu B if held. No other functionality is implemented.](images/mobius-functionmode-menuB.png){.lightbox}
+
+![**Tap Tempo Mode active:** Double tapping Pedal 5 sets the Tempo in the Transport. Pedal 8 exits Tap Tempo Mode.](images/mobius-functionmode-TapMode.png){.lightbox}
+:::
+
+	
