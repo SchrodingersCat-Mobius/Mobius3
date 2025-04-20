@@ -36,7 +36,7 @@ format:
     code-copy: true
     page-layout: full
     grid:
-      sidebar-width: 280px
+      sidebar-width: 300px
       body-width: 800px
       margin-width: 280px
       gutter-width: 1.5rem
