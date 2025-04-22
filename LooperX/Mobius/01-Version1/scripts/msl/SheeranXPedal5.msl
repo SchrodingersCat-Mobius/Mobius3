@@ -1,14 +1,15 @@
 #name SheeranXPedal5
 #sustain
+#repeat
 
 if fmode equals 0{
   case mode {
-    :Reset Record
-    :Record Overdub
-    :Overdub Play
-    :Play Overdub
-    :Mute Play
-    else print("Unhandled mode" mode)
+      :Reset {TransportStart Record}
+      :Record Overdub
+      :Overdub Play
+      :Play Overdub
+      :Mute Play
+      else print("Unhandled mode" mode)
   }
 }
 else if fmenuTap{

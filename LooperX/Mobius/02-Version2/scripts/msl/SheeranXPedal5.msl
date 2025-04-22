@@ -1,0 +1,32 @@
+#name SheeranXPedal5
+#sustain
+
+if normalmode equals 1{
+  //We must be in Normal Mode
+  case mode {
+    :Reset {TransportStart Record}
+    :Record Play
+    :Overdub Play
+    :Play Overdub
+    :Mute Play
+    else print("Unhandled mode" mode)
+  }
+}
+else if fmenuA equals 1{
+  //We must be in Function Menu A
+  if fsubmenu equals 0{
+    //We must not be in a function submenu yet so pressing pedal 5 enters Peel Mode (fsubmenu=1, a5mode=1)
+    fsubmenu = 1
+    a5mode = 1
+  }
+}
+else if tapmode equals 1{
+  //We must be in Tap Tempo Mode so pedal 5 sets the Transport Tempo
+  TransportTap
+}
+
+function OnSustain(sustainCount sustainElapsed) {
+  if normalmode equals 1{
+    Undo
+  }
+}

@@ -3,7 +3,7 @@ title: "Installation"
 ---
 
 1. Copy the msl scripts to the `scripts` folder.
-2. Open the `uiconfig.xml` file i na text editor.
+2. Open the `uiconfig.xml` file in a text editor.
 	
 :::{.callout-warning}
 Always make a back up copy of the `uiconfig.xml` file before attempting to edit it.
@@ -24,6 +24,7 @@ Don't edit `uiconfig.xml` while Möbius is running.  If you do, the changes you 
 ```
 
 4. Save the file.
-5. Open Möbius and enjoy!
+5. Open Möbius and set Key and/or MIDI bindings to bind SheeranXPedal1.msl, SheeranXPedal2.msl,... , SheeranXPedal8.msl to the keys and/or controls you wish to use as Pedals 1 to 8.
+6. Enjoy! 
 
 

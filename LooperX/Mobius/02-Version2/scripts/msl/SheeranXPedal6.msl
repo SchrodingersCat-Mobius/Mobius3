@@ -1,0 +1,21 @@
+#name SheeranXPedal6
+#sustain
+
+if normalmode equals 1{
+  //We must be in Normal Mode so pressing Pedal 6 stops all tracks (we actually Mute them)
+  in all MuteOn
+}
+else if fmenuA equals 1{
+  //We must be in Function Menu A
+  if fsubmenu equals 0{
+    //We must not be in a function submenu yet so pressing pedal 6 clears all Tracks
+    in all Reset
+  }
+}
+
+function OnSustain() {
+  if normalmode equals 1{
+    //We must in Normal Mode so pressing and holding pedal 6 clears all Tracks
+    in all Reset
+  }
+}

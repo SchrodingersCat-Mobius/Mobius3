@@ -1,0 +1,48 @@
+#name SheeranXPedal4
+#repeat
+
+if normalmode equals 1{
+  //Must be in Normal Mode so pressing pedal 4 selects Track 4
+  SelectTrack(4)
+}
+else if mutemode equals 1{
+  //We must be in Mute mode so pressing pedal 4 Mutes/Unmutes Track 4.
+  in 4 Mute
+}
+else if fmenuA equals 1{
+  //We must be in Function Menu A.
+  if fsubmenu equals 1{
+    //We must be in a function submenu.
+    if a5mode equals 1{
+	  //If a5mode=1 must be in Peel Mode so pressing pedal 4 undoes an overdubbed layer on Track 4.
+      in 4 Undo
+    }
+	else if a7mode equals 1{
+      //If a7mode=1 must be in Clear Track Mode so pressing pedal 4 clears Track 4.
+      in 4 Reset
+	}
+  }
+}
+else if fmenuB equals 1{
+  //We must be in Function Menu B.
+  if fsubmenu equals 1{
+    //We must be in a function submenu.
+    if b2mode equals 1{
+      //If b2mode=1 must be in Multiply Mode so pressing pedal 4 Mutiplies (8X) the active loop.
+      InstantMultiply(8)
+    }
+	else if b3mode equals 1{
+      //If b3mode=1 must be in Speed Mode so pressing pedal 4 multiplies the speed (8X) of the active loop.
+      SpeedOctave(3)
+    }
+    else if b7mode equals 1{
+      //If b7mode=1 must be in Reverse Mode so pressing pedal 4 reverse the direction of Track 4.
+      in 4 Reverse
+    }
+  }
+}
+
+//Double press of pedal 4 solos Track 4
+function OnRepeat(repeatCount){
+  in 4 Solo
+}

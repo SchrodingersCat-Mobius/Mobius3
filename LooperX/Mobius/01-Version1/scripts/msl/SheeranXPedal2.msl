@@ -1,15 +1,14 @@
 #name SheeranXPedal2
 #repeat
 
+//When Mute mode is on (mutemode=1) pressing pedal 2 Mutes/Unmutes Track 2
 //When Mute Mode is off (mutemode=0) pressing pedal 2 selects Track 2
-//When Mute mode is on (mutemode=1) pressing pedal 2 Selects Track 2 and then Mutes/Unmutes it.
-
-if mutemode equals 0{
-  SelectTrack(2)
+if mutemode equals 1{
+  in 2 Mute
 }
 else
 {
-  in 2 Mute
+  SelectTrack(2)
 }
 
 //Double press of Pedal 2 solos Track 2

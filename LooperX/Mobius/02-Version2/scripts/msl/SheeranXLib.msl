@@ -1,0 +1,54 @@
+#name Sheeran Looper X Library
+#library
+
+//Library script to emulate the Sheeran Looper X
+// (Still a work in progress)
+
+
+init{   
+   InstallUIElement("mutemodeLabel","mutemode" :Text  :text "Mute Mode" :width 67 :onColor :white :offColor :gray)
+   InstallUIElement("tapmodeLabel","tapmode" :Text  :text "Tap Mode" :width 60 :onColor :white :offColor :gray)
+
+   InstallUIElement("fmenuALabel","fmenuA" :Text  :text "Function Menu A"  :width 100 :onColor :white :offColor :gray)
+   InstallUIElement("a1modeLabel","a1mode" :Text  :text "1. TUNER"  :width 59 :onColor :white :offColor :gray)
+   InstallUIElement("a2modeLabel","a2mode" :Text  :text "2. FX"  :width 34 :onColor :white :offColor :gray)
+   InstallUIElement("a3modeLabel","a3mode" :Text  :text "3. LOAD"  :width 52 :onColor :white :offColor :gray)
+   InstallUIElement("a4modeLabel","a4mode" :Text  :text "4. SAVE"  :width 50 :onColor :white :offColor :gray)
+   InstallUIElement("a5modeLabel","a5mode" :Text  :text "5. PEEL"  :width 47 :onColor :white :offColor :gray)
+   InstallUIElement("a6modeLabel","a6mode" :Text  :text "6. CLEAR ALL"  :width 82 :onColor :white :offColor :gray)
+   InstallUIElement("a7modeLabel","a7mode" :Text  :text "7. CLEAR TRACKS"  :width 108 :onColor :white :offColor :gray)
+   InstallUIElement("a8modeLabel","a8mode" :Text  :text "8. EXIT"  :width 47 :onColor :white :offColor :gray)
+
+   InstallUIElement("fmenuBLabel","fmenuB" :Text  :text "Function Menu B"  :width 100 :onColor :white :offColor :gray)
+   InstallUIElement("b1modeLabel","b1mode" :Text  :text "1. BOUNCE"  :width 68 :onColor :white :offColor :gray)
+   InstallUIElement("b2modeLabel","b2mode" :Text  :text "2. MULTIPLY"  :width 76 :onColor :white :offColor :gray)
+   InstallUIElement("b3modeLabel","b3mode" :Text  :text "3. SPEED"  :width 57 :onColor :white :offColor :gray)
+   InstallUIElement("b4modeLabel","b4mode" :Text  :text "4. BACKING TRACK"  :width 116 :onColor :white :offColor :gray)
+   InstallUIElement("b5modeLabel","b5mode" :Text  :text "5. TRANSPOSE"  :width 90 :onColor :white :offColor :gray)
+   InstallUIElement("b6modeLabel","b6mode" :Text  :text "6. FADE"  :width 50 :onColor :white :offColor :gray)
+   InstallUIElement("b7modeLabel","b7mode" :Text  :text "7. REVERSE"  :width 73 :onColor :white :offColor :gray)
+   InstallUIElement("b8modeLabel","b8mode" :Text  :text "8. EXIT"  :width 47 :onColor :white :offColor :gray)
+}
+
+export variable normalmode=1
+export variable mutemode=0
+export variable tapmode=0
+export variable fmenuA=0
+export variable fmenuB=0
+export variable fsubmenu=0
+export variable a1mode=0
+export variable a2mode=0
+export variable a3mode=0
+export variable a4mode=0
+export variable a5mode=0
+export variable a6mode=0
+export variable a7mode=0
+export variable a8mode=0
+export variable b1mode=0
+export variable b2mode=0
+export variable b3mode=0
+export variable b4mode=0
+export variable b5mode=0
+export variable b6mode=0
+export variable b7mode=0
+export variable b8mode=0

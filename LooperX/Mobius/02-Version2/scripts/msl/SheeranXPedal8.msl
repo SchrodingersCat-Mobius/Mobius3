@@ -1,0 +1,60 @@
+#name SheeranXPedal8
+#sustain 500
+#repeat 500
+
+if normalmode equals 1{
+  //We must be in Normal Mode so pressing pedal 8 enters Function Menu A
+  fmenuA = 1
+  normalmode = 0
+}
+else{
+  //We must not be in Normal Mode so pressing pedal 8 exits and returns to Normal Mode
+  normalmode = 1
+  fmenuA = 0
+}
+mutemode = 0
+tapmode = 0
+fmenuB = 0
+fsubmenu = 0
+a1mode = 0
+a2mode = 0
+a3mode = 0
+a4mode = 0
+a5mode = 0
+a6mode = 0
+a7mode = 0
+a8mode = 0
+b1mode = 0
+b2mode = 0
+b3mode = 0
+b4mode = 0
+b5mode = 0
+b6mode = 0
+b7mode = 0
+b8mode = 0
+
+
+function OnSustain(sustainCount){
+  if normalmode equals 1{
+    //We must be in Normal Mode so pressing and holding pedal 8 should enters Function Menu B
+    fmenuB = 1
+    fmenuA = 0
+    normalmode = 0
+  }
+  else if fmenuA equals 1{
+	  //We must be in Function Menu A so pressing and holding pedal 8 should enter Function Menu B
+	  fmenuA = 0
+	  fmenuB = 1	
+  }
+  else if fmenuB equals 1{
+	  //We must be in Function Menu B so pressing and holding pedal 8 should enter Function Menu A
+	  fmenuA = 1
+	  fmenuB = 0
+  }  
+}
+
+function OnRepeat(repeatCount){
+  tapmode = 1
+  fmenuA = 0
+  normalmode = 0
+}

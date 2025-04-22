@@ -2,7 +2,7 @@
 #sustain
 
 if fmode equals 0{
-  in all {Stop}
+  in all {MuteOn}
 }
 
 function OnSustain() {

@@ -1,0 +1,51 @@
+---
+title: Advanced Version
+---  
+
+This version extends the Basic Version to add some of the Looper X behaviour associated with [Function Menu A](/LooperX/#function-menu-a) and [Function Menu B](/LooperX/#function-menu-b):
+
+* Pedals 1-4 work as expected when in [Normal Mode](/LooperX/#normal-mode) or [Mute Mode](/LooperX/#mute-mode)
+* Pedal 5 works as expected when in [Normal Mode](/LooperX/#normal-mode), [Mute Mode](/LooperX/#mute-mode) or [Tap Tempo](/LooperX#tap-tempo)
+* Pedal 6 works as expected when in [Normal Mode](/LooperX/#normal-mode)
+* Pedal 7 works as expected when in [Normal Mode](/LooperX/#normal-mode) or [Mute Mode](/LooperX/#mute-mode)
+* Pedal 8 works as expected when in [Normal Mode](/LooperX/#normal-mode) and can be used to switch between [Function Menu A](/LooperX/#function-menu-a) and [Function Menu B](/LooperX/#function-menu-b)
+
+After entering [Function Menu A](/LooperX/#function-menu-a)
+
+* Pressing Pedal 5 enables "Peel Mode". Pedals 1–4 can then be used to permanently "peel off" the successive layers of the corresponding looper track.
+* Pressing Pedal 6 clears all tracks.
+* Pressing Pedal 7 enables "Clear Track Mode". Pedals 1–4 can then be used to clear individual tracks.
+* Pressing Pedal 8 exits Function Menu A.
+* Tuner, FX, Load and Save functionality is not implemented.
+
+After entering [Function Menu B](/LooperX/#function-menu-b):
+
+* Pressing Pedal 2 enters "Multiply Mode". Pedals 1-4 can then be used to multiply the length of the active track by 0.5X, 2X, 4X and 8X respectively.
+* Pressing Pedal 3 enters "Speed Mode". Pedals 1-4 can then be used multiply the speed (and pitch) of the active track by 0.5X, 2X, 4X and 8X respectively.
+* Pressing Pedal 7 enters "Reverse Mode" Pedals 1-4 can then be used to toggle the play direction of Track 1-4. Pedal 5 reverses the play direction of all tracks.
+* Pressing Pedal 8 exits Function Menu B.
+* Bounce, Backing Track, Transpose and Fade functionality is not implemented.
+
+Below are some images of how the implementation looks in Möbius. (Click on any image to enlarge it.)
+
+::: {layout-ncol=2}
+![**Normal Mode:** Pedals 1-4 select corresponding tracks or solo them if double pressed.  Pedal 5 acts as Rec/Play/Overdub pedal with Undo if held. Pedal 6 stops all tracks and clears them if held. Pedal 7 enters Mute Mode. Pedal 8 enters Function Menu A, Tap Tempo Mode if double pressed and toggles between Function Menu B and Function Menu A if held.](./images/mobius-initial2.png){.lightbox}
+
+![**Mute Mode:** Pedals 1-4 Mute/Unmute the corresponding track or solo them if double pressed.  Pedal 7 exits Mute Mode.](images/mobius-mutemode2.png){.lightbox}
+
+![**Tap Tempo Mode active:** Double tapping Pedal 5 sets the Tempo in the Transport. Pedal 8 exits Tap Tempo Mode and returns to Normal Mode.](images/mobius-tapmode2.png){.lightbox}
+
+![**Function Menu A active:** Pressing Pedal 5 enters Peel Mode. Pressing Pedal 6 clears all tracks.  Pressing Pedal 7 enters Clear Track Mode. Pedal 8 exits Function Menu A if pressed and toggles between Function Menu A and Function Menu B if held. (Other Menu A functions are not currently implemented)](images/mobius-functionmenua2.png){.lightbox}
+
+![**Peel Mode active:** Pressing Pedals 1-4 removes an overdub layer from the corresponding track. Pressing Pedal 8 exits Peel Mode and returns to Normal Mode.](images/mobius-peelmode2.png){.lightbox}
+
+![**Clear Track Mode active:** Pressing Pedals 1-4 clears the corresponding track. Pressing Pedal 8 exits Clear Track Mode and returns to Normal Mode.](images/mobius-cleartracks2.png){.lightbox}
+
+![**Function Menu B active:** Pressing Pedal 2 enters Multiply Mode. Pressing Pedal 3 enters Speed Mode.  Pressing Pedal 7 enters Reverse Mode. Pedal 8 exits Function Menu B if pressed and toggles between Function Menu A and Function Menu B if held. (Other Menu A functions are not currently implemented)](images/mobius-functionmenub2.png){.lightbox}
+
+![**Multiply Mode active:** Pressing Pedals 1-4 multiplies the active track by 0.5, 2, 4 and 8 respectively. Pressing Pedal 8 exits Multiply Mode and returns to Normal Mode.](images/mobius-multiplymode2.png){.lightbox}
+
+![**Speed Mode active:** Pressing Pedals 1-4 changes the Speed (and Pitch) of the active Track by 0.5, 2, 4 and 8 times respectively. Pressing Pedal 8 exits Speed Mode and returns to Normal Mode.](images/mobius-speedmode2.png){.lightbox}
+
+![**Reverse Mode active:** Pressing Pedals 1-4 reverses the play direction of the corresponding Track. Pressing Pedal 5 reverses the play direction of all tracks simultaneously. Pressing Pedal 8 exits Reverse Mode and returns to Normal Mode.](images/mobius-reversemode2.png){.lightbox}
+:::

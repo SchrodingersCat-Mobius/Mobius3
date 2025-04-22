@@ -2,7 +2,7 @@
 title: Basic Version
 ---  
 
-This version implements the following aspects of Looper X behaviour:
+This version implements the Normal Mode, Mute Mode and Tap Tempo aspects of Looper X behaviour.  The ability to enter Function Menu A and Function Menu B is also included but the functions that are available in those modes aren't implemented.  
 
 * Pedals 1-4 work as expected when in [Normal Mode](/LooperX/#normal-mode) or [Mute Mode](/LooperX/#mute-mode)
 * Pedal 5 works as expected when in [Normal Mode](/LooperX/#normal-mode), [Mute Mode](/LooperX/#mute-mode) or [Tap Tempo](/LooperX#tap-tempo)

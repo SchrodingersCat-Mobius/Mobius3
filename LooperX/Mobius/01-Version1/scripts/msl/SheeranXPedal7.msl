@@ -1,4 +1,4 @@
-#name Pedal7
+#name SheeranXPedal7
 
 if mutemode equals 0{
   mutemode = 1

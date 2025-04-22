@@ -22,6 +22,10 @@ website:
                 contents:
                   - href: "LooperX/Mobius/01-Version1/scripts/scripts.qmd"
                   - href: "LooperX/Mobius/01-Version1/installation.qmd"
+              - href: "LooperX/Mobius/02-Version2/index.qmd"
+                contents:
+                  - href: "LooperX/Mobius/02-Version2/scripts/scripts.qmd"
+                  - href: "LooperX/Mobius/02-Version2/installation.qmd"
   page-navigation: true
 format:
   html:
