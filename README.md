@@ -33,5 +33,5 @@ Information on creating and customising websites using Quarto can be found at:
 7. When editing is complete, render the entire website by using `quarto render` in the bash shell or command window.
 8. Commit changes and push to GitHub using GitHub Desktop.
 9. (This step is only necessary once.) In the repo on GitHub go to `Settings`, select `Pages` under `Code and Automation`. Under `Build and Deployment`, set Source to `Deploy from a branch`. Under `Branch`, choose `main` and `/docs` and then click on `Save`.
-10. Make a note of the URL for the GitHub Pages site.
+10. The URL for the GitHub Pages site is of the form `http://<username>.github.io/<repository>` which for this site is <https://schrodingerscat-mobius.github.io/Mobius3/>.
 
